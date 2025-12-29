@@ -280,6 +280,45 @@ WHEN ANALYZING PROJECTS:
 
 Remember: The user may not be technical. Make everything easy to understand while maintaining professional accuracy.`;
 
+// Helper to extract and parse JSON from AI responses
+function extractAndParseJSON(text) {
+  if (!text) return null;
+
+  // 1. Try markdown code block
+  const codeBlockMatch = text.match(/```json\s*([\s\S]*?)\s*```/);
+  if (codeBlockMatch) {
+    try {
+      return JSON.parse(codeBlockMatch[1]);
+    } catch (e) {
+      // Continue to next method
+    }
+  }
+
+  // 2. Try regex extraction (finds first { and last })
+  const jsonMatch = text.match(/\{[\s\S]*\}/);
+  if (jsonMatch) {
+    try {
+      return JSON.parse(jsonMatch[0]);
+    } catch (e) {
+      // Check if it's "Unexpected end of JSON input" (truncation)
+      if (e.message.includes('end of JSON input')) {
+        // Try to recover simple truncation by appending braces
+        // This is a naive heuristic but better than crashing
+        try {
+          return JSON.parse(jsonMatch[0] + '}');
+        } catch (e2) {
+          try {
+            return JSON.parse(jsonMatch[0] + ']}');
+          } catch (e3) { }
+        }
+      }
+      logger.warn('Failed to parse extracted JSON', { error: e.message });
+    }
+  }
+
+  return null;
+}
+
 // Classify user intent
 function classifyIntent(message) {
   const lowerMessage = message.toLowerCase();
@@ -1665,7 +1704,7 @@ ANALYZE THOROUGHLY:
 5. List all sheet numbers/names visible
 6. Identify the drawing discipline (fire alarm, security, electrical, etc.)
 
-Return comprehensive JSON:
+Return comprehensive JSON in a MARKDOWN CODE BLOCK:
 {
   "legendFound": true/false,
   "legendPages": [page numbers where legend was found],
@@ -1708,9 +1747,9 @@ Be THOROUGH. This information will be used by all other analysis systems.`
         });
 
         const legendText = legendResponse.content[0]?.text || '{}';
-        const legendMatch = legendText.match(/\{[\s\S]*\}/);
-        if (legendMatch) {
-          const legendData = JSON.parse(legendMatch[0]);
+        const legendData = extractAndParseJSON(legendText);
+
+        if (legendData) {
           knowledgeBase.blueprints.legend = legendData;
           knowledgeBase.blueprints.scale = legendData.scale;
           knowledgeBase.blueprints.sheetIndex = legendData.sheetIndex || [];
@@ -1761,7 +1800,7 @@ ANALYZE THIS PAGE THOROUGHLY:
 6. Note any conduit/pathway routing shown
 7. Look for any notes or callouts
 
-Return JSON:
+Return JSON in a MARKDOWN CODE BLOCK:
 {
   "sheetNumber": "E1.1",
   "sheetName": "First Floor Fire Alarm",
@@ -1808,9 +1847,9 @@ Be PRECISE with device locations and counts.`
             });
 
             const pageText = pageResponse.content[0]?.text || '{}';
-            const pageMatch = pageText.match(/\{[\s\S]*\}/);
-            if (pageMatch) {
-              const pageData = JSON.parse(pageMatch[0]);
+            const pageData = extractAndParseJSON(pageText);
+
+            if (pageData) {
               pageData.filename = doc.filename;
               pageData.pageIndex = page.page;
 
@@ -1921,7 +1960,7 @@ EXTRACT THE FOLLOWING:
 
 7. SPECIAL REQUIREMENTS (prevailing wage, bonding, insurance, certifications)
 
-Return comprehensive JSON:
+Return comprehensive JSON in a MARKDOWN CODE BLOCK:
 {
   "systems": {
     "fire_alarm": {
@@ -1972,9 +2011,9 @@ Be THOROUGH. Extract every requirement that affects bidding or installation.`
           });
 
           const specText = specResponse.content[0]?.text || '{}';
-          const specMatch = specText.match(/\{[\s\S]*\}/);
-          if (specMatch) {
-            const specData = JSON.parse(specMatch[0]);
+          const specData = extractAndParseJSON(specText);
+
+          if (specData) {
             knowledgeBase.specifications = {
               analyzed: true,
               ...specData
@@ -2008,7 +2047,7 @@ Extract all contractual and bidding requirements:
 
 ${rfpText.substring(0, 30000)}
 
-Return JSON:
+Return JSON in a MARKDOWN CODE BLOCK:
 {
   "bidDueDate": "date",
   "projectTimeline": {
@@ -2033,11 +2072,12 @@ Return JSON:
         });
 
         const rfpText2 = rfpResponse.content[0]?.text || '{}';
-        const rfpMatch = rfpText2.match(/\{[\s\S]*\}/);
-        if (rfpMatch) {
+        const rfpData = extractAndParseJSON(rfpText2);
+
+        if (rfpData) {
           knowledgeBase.contract = {
             analyzed: true,
-            ...JSON.parse(rfpMatch[0])
+            ...rfpData
           };
         }
       } catch (rfpError) {
