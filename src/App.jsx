@@ -14,6 +14,7 @@ import ApiKeyModal from './components/ApiKeyModal';
 import ErrorBoundary from './components/ErrorBoundary';
 import { ToastProvider, useToast } from './components/Toast';
 import { api } from './services/api';
+import AppLayout from './components/layout/AppLayout';
 
 function AppContent() {
   const [currentView, setCurrentView] = useState('projects');
