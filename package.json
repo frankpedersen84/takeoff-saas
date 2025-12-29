@@ -1,0 +1,59 @@
+{
+  "name": "takeoff-ai",
+  "version": "1.0.0",
+  "description": "AI-powered construction estimating and proposal generation for low-voltage systems",
+  "main": "server/index.js",
+  "scripts": {
+    "dev": "concurrently \"npm run server:dev\" \"npm run client:dev\"",
+    "server:dev": "nodemon server/index.js",
+    "client:dev": "vite",
+    "build": "vite build",
+    "start": "node server/index.js",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.32.1",
+    "@google/generative-ai": "^0.24.1",
+    "@react-three/drei": "^10.7.7",
+    "@react-three/fiber": "^9.4.2",
+    "@types/three": "^0.182.0",
+    "archiver": "^7.0.1",
+    "canvas": "^3.2.0",
+    "cors": "^2.8.5",
+    "docx": "^9.5.1",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "express-rate-limit": "^7.4.1",
+    "file-saver": "^2.0.5",
+    "helmet": "^8.0.0",
+    "konva": "^10.0.12",
+    "multer": "^1.4.5-lts.1",
+    "pdf-parse": "^1.1.1",
+    "pdf-to-img": "^5.0.0",
+    "pdfjs-dist": "^5.4.449",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "react-konva": "^19.2.1",
+    "sharp": "^0.34.5",
+    "three": "^0.182.0",
+    "use-image": "^1.1.4",
+    "uuid": "^10.0.0",
+    "winston": "^3.15.0",
+    "xlsx": "^0.18.5",
+    "@supabase/supabase-js": "^2.45.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.3",
+    "autoprefixer": "^10.4.20",
+    "concurrently": "^9.1.0",
+    "nodemon": "^3.1.7",
+    "postcss": "^8.4.47",
+    "tailwindcss": "^3.4.14",
+    "vite": "^5.4.10"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

@@ -1,0 +1,8 @@
+Project: Test Project
+Scope: Fire Alarm and CCTV system for a small office building.
+Requirements:
+- 10 Smoke detectors
+- 2 Manual Pull Stations
+- 4 Horn/Strobes
+- 5 CCTV Cameras (IP, 4MP)
+- 1 NVR

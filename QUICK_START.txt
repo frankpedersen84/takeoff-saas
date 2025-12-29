@@ -1,0 +1,42 @@
+╔══════════════════════════════════════════════════════════════╗
+║                    TakeoffAI Quick Start                      ║
+║                   3D Technology Services                      ║
+╚══════════════════════════════════════════════════════════════╝
+
+FIRST TIME SETUP:
+─────────────────
+1. Double-click "SETUP.bat"
+2. Follow the prompts to enter your API key
+3. Wait for installation to complete (~2-5 minutes)
+
+AFTER SETUP:
+────────────
+Just double-click "START.bat" to launch the app!
+
+The app will open automatically in your browser at:
+http://localhost:5173
+
+
+REQUIREMENTS:
+─────────────
+• Node.js (will prompt you to install if missing)
+• Anthropic API Key (get one at https://console.anthropic.com)
+
+
+TROUBLESHOOTING:
+────────────────
+• "Node.js not found" → Install from https://nodejs.org (LTS version)
+• "API key invalid" → Check your key in the .env file
+• App won't start → Delete node_modules folder and run SETUP.bat again
+
+
+FILES:
+──────
+• SETUP.bat    - First time setup (run once)
+• START.bat    - Launch the app (run every time)
+• .env         - Your configuration (contains API key)
+
+
+SUPPORT:
+────────
+Contact 3D Technology Services for assistance.
