@@ -50,6 +50,7 @@ function AppContent() {
   const loadAgents = async () => {
     try {
       const response = await api.getAgents();
+      console.log('DEBUG: loadAgents response', response);
       if (response && response.agents) {
         const agentMap = {};
         response.agents.forEach(agent => {
