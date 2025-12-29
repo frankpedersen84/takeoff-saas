@@ -10,6 +10,7 @@ import BlueprintVisionView from './views/BlueprintVisionView';
 import ProfileView from './views/ProfileView';
 import ProjectsListView from './views/ProjectsListView';
 import ProjectView from './views/ProjectView';
+import PreJobWalkView from './views/PreJobWalkView';
 import ApiKeyModal from './components/ApiKeyModal';
 import ErrorBoundary from './components/ErrorBoundary';
 import { ToastProvider, useToast } from './components/Toast';
@@ -343,6 +344,8 @@ function AppContent() {
             onToast={showToast}
           />
         );
+      case 'walk':
+        return <PreJobWalkView />;
       default:
         return (
           <ProjectsListView

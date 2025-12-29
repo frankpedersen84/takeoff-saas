@@ -156,6 +156,15 @@ export const api = {
     return handleResponse(response);
   },
 
+  async analyzeLiveFrame(image, prompt, systemContext) {
+    const response = await fetch(`${API_BASE}/gemini/analyze-frame`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ image, prompt, systemContext })
+    });
+    return handleResponse(response);
+  },
+
   // Profile/Company Settings
   async getProfile() {
     const response = await fetch(`${API_BASE}/profile`);

@@ -8,6 +8,7 @@ export default function Sidebar({ currentView, onNavigate, isAdvancedMode }) {
         ...(isAdvancedMode ? [
             { id: 'agents', label: 'AI Workforce', icon: '🤖' },
             { id: 'vision', label: 'Blueprint Vision', icon: '📐' },
+            { id: 'walk', label: 'Site Walk', icon: '👷' },
             { id: 'chat', label: 'Chat', icon: '💬' },
         ] : []),
     ];

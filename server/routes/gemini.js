@@ -104,4 +104,76 @@ router.post('/analyze-video', upload.single('video'), async (req, res) => {
     }
 });
 
+// LIVE FRAME ANALYSIS ROUTE for Pre-Job Walk
+router.post('/analyze-frame', express.json({ limit: '10mb' }), async (req, res) => {
+    try {
+        const { image, prompt = "What do you see?", systemContext = "" } = req.body;
+
+        if (!image) {
+            return res.status(400).json({ error: 'No image data provided' });
+        }
+
+        // Expected format: "data:image/jpeg;base64,/9j/4AAQSkZ..."
+        const base64Data = image.replace(/^data:image\/\w+;base64,/, "");
+
+        const genAI = getGeminiClient();
+        // Use Flash model for low latency
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest" });
+
+        const imagePart = {
+            inlineData: {
+                data: base64Data,
+                mimeType: "image/jpeg"
+            }
+        };
+
+        const systemPrompt = `
+You are an expert low-voltage estimator assistant walking a construction site. 
+Your job is to identify equipment and installation conditions.
+Context: ${systemContext}
+
+Output strictly JSON:
+{
+  "equipment": [{ "type": "string", "manufacturer": "string", "model": "string", "confidence": "high|medium|low", "notes": "string" }],
+  "observations": ["string"],
+  "flags": [{ "type": "discrepancy|damage|access", "description": "string", "severity": "high|medium|low" }]
+}
+`;
+
+        const result = await model.generateContent([
+            systemPrompt + "\n\n" + prompt,
+            imagePart
+        ]);
+
+        const response = await result.response;
+        const text = response.text();
+
+        // Extract JSON if wrapped in markdown code blocks
+        const jsonMatch = text.match(/```json\n([\s\S]*?)\n```/) || text.match(/```\n([\s\S]*?)\n```/);
+        const jsonStr = jsonMatch ? jsonMatch[1] : text;
+
+        let analysisData;
+        try {
+            analysisData = JSON.parse(jsonStr);
+        } catch (e) {
+            // Fallback for partial/malformed JSON
+            logger.warn('Failed to parse Gemini JSON response', { text });
+            analysisData = {
+                equipment: [],
+                observations: [text],
+                flags: []
+            };
+        }
+
+        res.json({
+            success: true,
+            data: analysisData
+        });
+
+    } catch (error) {
+        logger.error('Gemini Live Analysis Failed', { error: error.message });
+        res.status(500).json({ error: error.message });
+    }
+});
+
 module.exports = router;
