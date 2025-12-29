@@ -8,6 +8,16 @@ const xlsx = require('xlsx');
 const sharp = require('sharp');
 const logger = require('../utils/logger');
 
+// Polyfill DOMMatrix for pdfjs-dist (required for Node.js environment)
+try {
+  const canvas = require('canvas');
+  if (canvas && canvas.DOMMatrix) {
+    global.DOMMatrix = canvas.DOMMatrix;
+  }
+} catch (e) {
+  // Ignore if canvas is missing (handler below covers it)
+}
+
 // Try to load canvas (may fail on some systems without build tools)
 let createCanvas;
 let canvasAvailable = false;
@@ -63,10 +73,10 @@ const fileFilter = (req, file, cb) => {
     'image/webp',
     'image/tiff'
   ];
-  
+
   const allowedExtensions = ['.pdf', '.xlsx', '.xls', '.doc', '.docx', '.txt', '.jpg', '.jpeg', '.png', '.gif', '.webp', '.tiff', '.tif'];
   const ext = path.extname(file.originalname).toLowerCase();
-  
+
   if (allowedTypes.includes(file.mimetype) || allowedExtensions.includes(ext)) {
     cb(null, true);
   } else {
@@ -86,7 +96,7 @@ const upload = multer({
 // Check if file is likely a blueprint/floor plan based on name
 function isLikelyBlueprint(filename) {
   const lowerName = filename.toLowerCase();
-  
+
   // Common blueprint keywords
   const blueprintKeywords = [
     'floor', 'plan', 'blueprint', 'drawing', 'drwg', 'layout', 'elevation',
@@ -94,7 +104,7 @@ function isLikelyBlueprint(filename) {
     'reflected', 'ceiling', 'rcp', 'site', 'civil', 'structural',
     'mechanical', 'plumbing', 'fire', 'life safety', 'security', 'magnolia'
   ];
-  
+
   // Sheet number patterns like A0.01, E-101, M1.1, etc.
   const sheetPatterns = [
     /^a\d/i,      // A0, A1, A2...
@@ -107,17 +117,17 @@ function isLikelyBlueprint(filename) {
     /^ls\d/i,     // LS1...
     /[aemps]-?\d+\.\d+/i,  // A0.01, E-1.01, etc.
   ];
-  
+
   // Check keywords
   if (blueprintKeywords.some(kw => lowerName.includes(kw))) {
     return true;
   }
-  
+
   // Check sheet patterns
   if (sheetPatterns.some(pattern => pattern.test(lowerName))) {
     return true;
   }
-  
+
   return false;
 }
 
@@ -128,12 +138,12 @@ class NodeCanvasFactory {
     const context = canvas.getContext('2d');
     return { canvas, context };
   }
-  
+
   reset(canvasAndContext, width, height) {
     canvasAndContext.canvas.width = width;
     canvasAndContext.canvas.height = height;
   }
-  
+
   destroy(canvasAndContext) {
     canvasAndContext.canvas.width = 0;
     canvasAndContext.canvas.height = 0;
@@ -150,23 +160,23 @@ async function convertPdfToImages(filePath, maxPages = 10) {
       console.log('[VISION] pdf-to-img not available - skipping PDF to image conversion');
       return [];
     }
-    
+
     const images = [];
     let pageNum = 0;
-    
+
     console.log(`[VISION] Converting PDF: ${path.basename(filePath)}`);
 
     // pdf-to-img returns an async iterator of PNG buffers
     for await (const pageBuffer of await pdf(filePath, { scale: 1.5 })) {
       pageNum++;
       if (pageNum > maxPages) break;
-      
+
       try {
         // Convert PNG to JPEG and resize if needed
         let buffer = await sharp(pageBuffer)
           .jpeg({ quality: 85 })
           .toBuffer();
-        
+
         // Resize if too large for Claude vision (max ~4MB)
         if (buffer.length > 4 * 1024 * 1024) {
           buffer = await sharp(buffer)
@@ -174,23 +184,23 @@ async function convertPdfToImages(filePath, maxPages = 10) {
             .jpeg({ quality: 80 })
             .toBuffer();
         }
-        
+
         const base64 = buffer.toString('base64');
-        
+
         images.push({
           page: pageNum,
           base64,
           mediaType: 'image/jpeg',
           filename: `page-${pageNum}.jpg`
         });
-        
-        console.log(`[VISION] Converted page ${pageNum} (${Math.round(buffer.length/1024)}KB)`);
-        
+
+        console.log(`[VISION] Converted page ${pageNum} (${Math.round(buffer.length / 1024)}KB)`);
+
       } catch (pageError) {
         console.error(`[VISION] Failed to convert page ${pageNum}:`, pageError.message);
       }
     }
-    
+
     console.log(`[VISION] Converted ${images.length} pages total`);
     return images;
   } catch (error) {
@@ -256,13 +266,13 @@ async function extractExcelText(filePath) {
   try {
     const workbook = xlsx.readFile(filePath);
     let text = '';
-    
+
     workbook.SheetNames.forEach(sheetName => {
       const sheet = workbook.Sheets[sheetName];
       const csv = xlsx.utils.sheet_to_csv(sheet);
       text += `\n--- Sheet: ${sheetName} ---\n${csv}`;
     });
-    
+
     return text;
   } catch (error) {
     logger.error('Excel extraction error', { error: error.message, filePath });
@@ -287,26 +297,26 @@ async function processFile(file) {
   let content = '';
   let visionData = null;
   let isBlueprint = false;
-  
+
   try {
     const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.tiff', '.tif'];
-    
+
     // Check if this is likely a blueprint
     isBlueprint = isLikelyBlueprint(file.originalname);
-    
+
     switch (ext) {
       case '.pdf':
         // Extract text content
         content = await extractPdfText(file.path);
-        
+
         // ALWAYS try to convert PDFs to images for vision analysis
         // This enables vision for all PDFs - users can analyze any document visually
         console.log(`[VISION] Processing PDF: ${file.originalname}, isBlueprint=${isBlueprint}`);
-        
+
         try {
           const images = await convertPdfToImages(file.path);
           console.log(`[VISION] Converted ${images.length} pages from ${file.originalname}`);
-          
+
           if (images.length > 0) {
             visionData = {
               type: 'pdf_pages',
@@ -320,21 +330,21 @@ async function processFile(file) {
           console.error(`[VISION] PDF conversion failed for ${file.originalname}:`, conversionError.message);
         }
         break;
-        
+
       case '.xlsx':
       case '.xls':
         content = await extractExcelText(file.path);
         break;
-        
+
       case '.txt':
         content = await extractTextFile(file.path);
         break;
-        
+
       case '.doc':
       case '.docx':
         content = '[Word document - text extraction requires additional processing]';
         break;
-        
+
       default:
         // Check if it's an image file
         if (imageExtensions.includes(ext)) {
@@ -367,10 +377,10 @@ async function processFile(file) {
       isBlueprint,
       preview: content?.substring(0, 200) || '[empty]'
     });
-    
+
     // Clean up uploaded file after processing
-    await fs.unlink(file.path).catch(() => {});
-    
+    await fs.unlink(file.path).catch(() => { });
+
     return {
       filename: file.originalname,
       size: file.size,
@@ -382,7 +392,7 @@ async function processFile(file) {
     };
   } catch (error) {
     // Clean up on error
-    await fs.unlink(file.path).catch(() => {});
+    await fs.unlink(file.path).catch(() => { });
     throw error;
   }
 }
@@ -394,9 +404,9 @@ router.post('/upload', upload.array('files', 10), async (req, res) => {
       return res.status(400).json({ error: 'No files uploaded' });
     }
 
-    logger.info('Processing uploaded files', { 
+    logger.info('Processing uploaded files', {
       fileCount: req.files.length,
-      requestId: req.requestId 
+      requestId: req.requestId
     });
 
     const results = await Promise.all(
@@ -434,18 +444,18 @@ router.post('/upload', upload.array('files', 10), async (req, res) => {
     });
 
   } catch (error) {
-    logger.error('File upload error', { 
+    logger.error('File upload error', {
       error: error.message,
-      requestId: req.requestId 
+      requestId: req.requestId
     });
-    
+
     if (error.code === 'LIMIT_FILE_SIZE') {
       return res.status(400).json({ error: 'File too large' });
     }
     if (error.code === 'LIMIT_FILE_COUNT') {
       return res.status(400).json({ error: 'Too many files' });
     }
-    
+
     res.status(500).json({ error: 'Failed to process uploaded files' });
   }
 });
