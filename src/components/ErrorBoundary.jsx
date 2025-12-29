@@ -23,8 +23,8 @@ class ErrorBoundary extends React.Component {
   render() {
     if (this.state.hasError) {
       return (
-        <div className="min-h-screen bg-bg-primary flex items-center justify-center p-8">
-          <div className="max-w-lg w-full bg-bg-card rounded-2xl p-8 border border-red-500/30 text-center">
+        <div className="min-h-screen bg-base flex items-center justify-center p-8">
+          <div className="max-w-lg w-full bg-level-2 rounded-2xl p-8 border border-red-500/30 text-center">
             <div className="text-6xl mb-6">⚠️</div>
             <h1 className="text-2xl font-bold text-white mb-4">
               Something went wrong
@@ -32,9 +32,9 @@ class ErrorBoundary extends React.Component {
             <p className="text-gray-400 mb-6">
               An unexpected error occurred. Please try refreshing the page or contact support if the problem persists.
             </p>
-            
+
             {process.env.NODE_ENV !== 'production' && this.state.error && (
-              <details className="text-left mb-6 bg-bg-secondary rounded-lg p-4">
+              <details className="text-left mb-6 bg-level-1 rounded-lg p-4">
                 <summary className="text-red-400 cursor-pointer font-medium">
                   Error Details
                 </summary>

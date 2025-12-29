@@ -3,23 +3,36 @@
 @tailwind utilities;
 
 :root {
+  /* Brand Colors */
   --gold: #FFB81C;
   --gold-dark: #E5A200;
   --gold-light: #FFD470;
   --teal: #17B2B2;
   --teal-dark: #0E8F8F;
   --teal-light: #4DD4D4;
-  --bg-primary: #0A0F1C;
-  --bg-secondary: #111827;
-  --bg-tertiary: #1F2937;
-  --bg-card: #162032;
+
+  /* Background Layers */
+  --bg-base: #0A0F1C;
+  --bg-level-1: #111827;
+  --bg-level-2: #162032;
+  --bg-level-3: #1F2937;
+  --bg-level-4: #2D3748;
+
+  /* Text Colors */
   --text-primary: #F9FAFB;
   --text-secondary: #9CA3AF;
   --text-muted: #6B7280;
-  --border: #374151;
+
+  /* Status Colors */
   --success: #10B981;
   --warning: #F59E0B;
   --error: #EF4444;
+  --info: #3B82F6;
+
+  /* Assets */
+  --border: #374151;
+  --border-active-gold: rgba(255, 184, 28, 0.3);
+  --border-active-teal: rgba(23, 178, 178, 0.3);
 }
 
 * {
@@ -30,10 +43,15 @@
 
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  background: var(--bg-primary);
+  background: var(--bg-base);
   color: var(--text-primary);
   min-height: 100vh;
   overflow-x: hidden;
+  /* Ambient Background */
+  background-image:
+    radial-gradient(ellipse at 20% 20%, rgba(255, 184, 28, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 80%, rgba(23, 178, 178, 0.08) 0%, transparent 50%);
+  background-attachment: fixed;
 }
 
 /* Scrollbar */
@@ -43,7 +61,7 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--bg-secondary);
+  background: var(--bg-level-1);
 }
 
 ::-webkit-scrollbar-thumb {
@@ -53,35 +71,6 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--teal);
-}
-
-/* Background pattern */
-.bg-pattern {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background:
-    radial-gradient(ellipse at 20% 20%, rgba(255, 184, 28, 0.08) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 80%, rgba(23, 178, 178, 0.08) 0%, transparent 50%),
-    radial-gradient(ellipse at 50% 50%, rgba(255, 184, 28, 0.03) 0%, transparent 70%);
-  pointer-events: none;
-  z-index: 0;
-}
-
-.grid-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-image:
-    linear-gradient(rgba(255, 184, 28, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 184, 28, 0.03) 1px, transparent 1px);
-  background-size: 50px 50px;
-  pointer-events: none;
-  z-index: 0;
 }
 
 /* Gradient utilities */
@@ -118,12 +107,21 @@ body {
 
 /* Animation utilities */
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
 }
 
 .animate-spin-slow {
@@ -131,12 +129,17 @@ body {
 }
 
 /* Form inputs */
-input, textarea, select {
+input,
+textarea,
+select {
   outline: none;
 }
 
-input:focus, textarea:focus, select:focus {
+input:focus,
+textarea:focus,
+select:focus {
   border-color: var(--gold) !important;
+  box-shadow: 0 0 0 3px rgba(255, 184, 28, 0.1);
 }
 
 /* Markdown content styling */
@@ -145,38 +148,46 @@ input:focus, textarea:focus, select:focus {
 .markdown-content h3 {
   margin-top: 1.5em;
   margin-bottom: 0.5em;
-  font-weight: 600;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
 }
 
 .markdown-content p {
   margin-bottom: 1em;
+  color: var(--text-secondary);
+  line-height: 1.6;
 }
 
 .markdown-content ul,
 .markdown-content ol {
   margin-left: 1.5em;
   margin-bottom: 1em;
+  color: var(--text-secondary);
 }
 
 .markdown-content code {
-  background: var(--bg-tertiary);
+  background: var(--bg-level-3);
   padding: 0.2em 0.4em;
   border-radius: 4px;
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.9em;
+  color: var(--gold-light);
 }
 
 .markdown-content pre {
-  background: var(--bg-tertiary);
+  background: var(--bg-level-2);
   padding: 1em;
   border-radius: 8px;
   overflow-x: auto;
   margin-bottom: 1em;
+  border: 1px solid var(--border);
 }
 
 .markdown-content pre code {
   background: none;
   padding: 0;
+  color: var(--text-primary);
 }
 
 .markdown-content table {
@@ -188,11 +199,17 @@ input:focus, textarea:focus, select:focus {
 .markdown-content th,
 .markdown-content td {
   border: 1px solid var(--border);
-  padding: 0.5em 1em;
+  padding: 0.75em 1em;
   text-align: left;
 }
 
 .markdown-content th {
-  background: var(--bg-tertiary);
+  background: var(--bg-level-2);
   font-weight: 600;
+  color: var(--text-primary);
+}
+
+.markdown-content td {
+  background: var(--bg-level-1);
+  color: var(--text-secondary);
 }

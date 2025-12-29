@@ -566,8 +566,8 @@ ${projectData?.analysis ? `\nPROJECT ANALYSIS:\n${projectData.analysis.substring
     <div
       onClick={onClick}
       className={`relative p-8 rounded-2xl border transition-all duration-300 cursor-pointer group hover:-translate-y-1 ${isActive
-          ? 'bg-gradient-to-br from-bg-card to-bg-secondary border-gold shadow-lg shadow-gold/10'
-          : 'bg-bg-card border-gray-700 hover:border-gray-500'
+        ? 'bg-gradient-to-br from-level-2 to-level-1 border-gold shadow-lg shadow-gold/10'
+        : 'bg-level-2 border-gray-700 hover:border-gray-500'
         }`}
     >
       {isCompleted && (
@@ -641,7 +641,7 @@ ${projectData?.analysis ? `\nPROJECT ANALYSIS:\n${projectData.analysis.substring
             </button>
             <button
               onClick={handleExportExcel}
-              className="p-6 bg-bg-card border border-gray-700 rounded-xl hover:bg-bg-tertiary transition-colors flex flex-col items-center justify-center text-white"
+              className="p-6 bg-level-2 border border-gray-700 rounded-xl hover:bg-level-3 transition-colors flex flex-col items-center justify-center text-white"
             >
               <span className="text-3xl mb-3">📊</span>
               <span className="text-lg font-bold">Export Excel</span>
@@ -676,20 +676,20 @@ ${projectData?.analysis ? `\nPROJECT ANALYSIS:\n${projectData.analysis.substring
               <div className="relative">
                 <button
                   onClick={() => setShowExportMenu(!showExportMenu)}
-                  className="px-6 py-3 bg-bg-card border border-gray-700 rounded-lg text-white text-sm font-medium flex items-center gap-2 hover:bg-bg-tertiary transition-colors"
+                  className="px-6 py-3 bg-level-2 border border-gray-700 rounded-lg text-white text-sm font-medium flex items-center gap-2 hover:bg-level-3 transition-colors"
                 >
                   📊 Export ▾
                 </button>
                 {showExportMenu && (
-                  <div className="absolute right-0 mt-2 w-64 bg-bg-card border border-gray-700 rounded-xl shadow-xl z-50 overflow-hidden">
+                  <div className="absolute right-0 mt-2 w-64 bg-level-2 border border-gray-700 rounded-xl shadow-xl z-50 overflow-hidden">
                     {/* ... export menu items ... */}
                     <div className="p-2 border-b border-gray-700">
                       <span className="text-xs text-gray-500 px-3">SPREADSHEET EXPORTS</span>
                     </div>
-                    <button onClick={handleExportExcel} className="w-full px-4 py-3 text-left text-sm hover:bg-bg-tertiary flex items-center gap-3">
+                    <button onClick={handleExportExcel} className="w-full px-4 py-3 text-left text-sm hover:bg-level-3 flex items-center gap-3">
                       <span>📊</span> Project Summary
                     </button>
-                    <button onClick={handleExportBOM} className="w-full px-4 py-3 text-left text-sm hover:bg-bg-tertiary flex items-center gap-3">
+                    <button onClick={handleExportBOM} className="w-full px-4 py-3 text-left text-sm hover:bg-level-3 flex items-center gap-3">
                       <span>📦</span> Bill of Materials (BOM)
                     </button>
                     {/* ... other exports ... */}
@@ -710,7 +710,7 @@ ${projectData?.analysis ? `\nPROJECT ANALYSIS:\n${projectData.analysis.substring
           {/* Project Stats Summary */}
           <div className="grid grid-cols-4 gap-5 mb-8">
             {summaryCards.map((card, i) => (
-              <div key={i} className="bg-bg-card rounded-2xl p-6 border border-gray-700">
+              <div key={i} className="bg-level-2 rounded-2xl p-6 border border-gray-700">
                 <div className="flex justify-between items-start mb-4">
                   <span className="text-sm text-gray-500">{card.label}</span>
                   <span className="text-2xl">{card.icon}</span>
@@ -727,7 +727,7 @@ ${projectData?.analysis ? `\nPROJECT ANALYSIS:\n${projectData.analysis.substring
           <div className="grid grid-cols-2 gap-5">
             {activeAgents.map(agentId => (
               // ... existing card ...
-              <div key={agentId} className="bg-bg-card rounded-2xl p-6 border border-gray-700">
+              <div key={agentId} className="bg-level-2 rounded-2xl p-6 border border-gray-700">
                 {/* ... content ... */}
                 <div className="flex items-center gap-3 mb-5">
                   <div className="w-11 h-11 rounded-xl flex items-center justify-center text-xl bg-gray-800">
@@ -738,7 +738,7 @@ ${projectData?.analysis ? `\nPROJECT ANALYSIS:\n${projectData.analysis.substring
                     <p className="text-xs text-gray-500">Active</p>
                   </div>
                 </div>
-                <div className="grid grid-cols-3 gap-4 p-4 bg-bg-secondary rounded-xl mb-4">
+                <div className="grid grid-cols-3 gap-4 p-4 bg-level-1 rounded-xl mb-4">
                   <div>
                     <div className="text-xs text-gray-500 mb-1">Devices</div>
                     <div className="text-lg font-semibold">{systemEstimates[agentId]?.devices || 0}</div>
@@ -758,7 +758,7 @@ ${projectData?.analysis ? `\nPROJECT ANALYSIS:\n${projectData.analysis.substring
       {showProposalModal && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-[2000] p-8">
           {/* ... existing modal ... */}
-          <div className="bg-bg-card rounded-2xl w-full max-w-4xl p-6 border border-gray-700">
+          <div className="bg-level-2 rounded-2xl w-full max-w-4xl p-6 border border-gray-700">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-bold">Proposal Preview</h2>
               <button onClick={() => setShowProposalModal(false)}>Close</button>

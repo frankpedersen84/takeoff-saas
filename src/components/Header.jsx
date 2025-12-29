@@ -17,7 +17,7 @@ export default function Header({
   setIsAdvancedMode
 }) {
   return (
-    <header className="fixed top-0 left-0 right-0 h-[70px] bg-bg-primary/95 backdrop-blur-xl border-b border-gold/20 flex items-center justify-between px-6 z-50">
+    <header className="fixed top-0 left-0 right-0 h-[70px] bg-base/95 backdrop-blur-xl border-b border-gold/20 flex items-center justify-between px-6 z-50">
       {/* Logo Area */}
       <div
         className="flex items-center gap-3 cursor-pointer w-60" // Matches sidebar width approx
@@ -44,7 +44,7 @@ export default function Header({
           </div>
           <input
             type="text"
-            className="block w-full pl-10 pr-3 py-2 border border-gray-700 rounded-lg leading-5 bg-bg-secondary text-gray-300 placeholder-gray-500 focus:outline-none focus:bg-bg-tertiary focus:border-gold/50 transition duration-150 ease-in-out sm:text-sm"
+            className="block w-full pl-10 pr-3 py-2 border border-gray-700 rounded-lg leading-5 bg-level-1 text-gray-300 placeholder-gray-500 focus:outline-none focus:bg-level-2 focus:border-gold/50 transition duration-150 ease-in-out sm:text-sm"
             placeholder="Search projects, items, or ask AI..."
           />
         </div>
@@ -54,7 +54,7 @@ export default function Header({
       <div className="flex items-center gap-4">
 
         {/* Simple / Advanced Toggle */}
-        <div className="flex items-center gap-3 bg-bg-secondary/50 px-3 py-1.5 rounded-full border border-gray-700/50">
+        <div className="flex items-center gap-3 bg-level-1/50 px-3 py-1.5 rounded-lg border border-gray-700/50">
           <span className={`text-xs font-semibold ${!isAdvancedMode ? 'text-teal' : 'text-gray-500'}`}>
             SIMPLE
           </span>

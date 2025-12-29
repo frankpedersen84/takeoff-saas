@@ -297,7 +297,7 @@ function OutputDisplay({ content }) {
               <div key={el.key} className="my-4 overflow-x-auto rounded-lg border border-gray-700">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="bg-bg-tertiary">
+                    <tr className="bg-level-2">
                       {el.headers.map((h, hIdx) => (
                         <th key={hIdx} className="px-4 py-3 text-left font-semibold text-white border-b border-gray-600">
                           {h}
@@ -307,7 +307,7 @@ function OutputDisplay({ content }) {
                   </thead>
                   <tbody>
                     {el.rows.map((row, rIdx) => (
-                      <tr key={rIdx} className={rIdx % 2 === 0 ? 'bg-bg-secondary' : 'bg-bg-card'}>
+                      <tr key={rIdx} className={rIdx % 2 === 0 ? 'bg-level-1' : 'bg-level-2'}>
                         {row.map((cell, cIdx) => (
                           <td key={cIdx} className={`px-4 py-3 border-b border-gray-700/50 ${cIdx === 0 ? 'font-medium text-white' : 'text-gray-300'}`}>
                             {cell}
@@ -469,9 +469,9 @@ function AnalysisDisplay({ analysis, project }) {
 
       {/* Analysis Sections */}
       {sections.map((section, sIdx) => (
-        <div key={sIdx} className="bg-bg-secondary rounded-xl border border-gray-700 overflow-hidden">
+        <div key={sIdx} className="bg-level-1 rounded-xl border border-gray-700 overflow-hidden">
           {/* Section Header */}
-          <div className="px-5 py-4 bg-bg-tertiary border-b border-gray-700">
+          <div className="px-5 py-4 bg-level-2 border-b border-gray-700">
             <h3 className="text-lg font-semibold flex items-center gap-2">
               <span>{getSectionIcon(section.title)}</span>
               <span>{section.title}</span>
@@ -502,7 +502,7 @@ function AnalysisDisplay({ analysis, project }) {
             {section.subsections.length > 0 && (
               <div className="space-y-4">
                 {section.subsections.map((sub, subIdx) => (
-                  <div key={subIdx} className="bg-bg-card rounded-lg p-4 border border-gray-700/50">
+                  <div key={subIdx} className="bg-level-2 rounded-lg p-4 border border-gray-700/50">
                     <h4 className="text-sm font-semibold text-gold mb-3 flex items-center gap-2">
                       <span>{getSubsectionIcon(sub.title)}</span>
                       {sub.title}
@@ -1277,12 +1277,12 @@ export default function ProjectView({ projectId, companyProfile, onNavigate, onT
   return (
     <div className="pt-[70px] min-h-screen flex flex-col">
       {/* Project Header */}
-      <div className="bg-bg-secondary border-b border-gray-700 px-8 py-6">
+      <div className="bg-level-1 border-b border-gray-700 px-8 py-6">
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center gap-4 mb-4">
             <button
               onClick={() => onNavigate('projects')}
-              className="p-2 bg-bg-tertiary border border-gray-700 rounded-lg text-gray-400 hover:text-white transition-colors"
+              className="p-2 bg-level-2 border border-gray-700 rounded-lg text-gray-400 hover:text-white transition-colors"
             >
               ←
             </button>
@@ -1306,7 +1306,7 @@ export default function ProjectView({ projectId, companyProfile, onNavigate, onT
                 onClick={() => setActiveTab(tab.id)}
                 className={`px-5 py-2.5 rounded-xl font-medium transition-all ${activeTab === tab.id
                   ? 'bg-gold text-black'
-                  : 'bg-bg-tertiary text-gray-400 hover:text-white'
+                  : 'bg-level-2 text-gray-400 hover:text-white'
                   }`}
               >
                 <span className="mr-2">{tab.icon}</span>
@@ -1343,7 +1343,7 @@ export default function ProjectView({ projectId, companyProfile, onNavigate, onT
                   <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                     <div className={`max-w-[80%] p-4 rounded-xl ${msg.role === 'user'
                       ? 'bg-gold text-black'
-                      : 'bg-bg-card border border-gray-700'
+                      : 'bg-level-2 border border-gray-700'
                       }`}>
                       <div className="whitespace-pre-wrap">{msg.content}</div>
                     </div>
@@ -1352,7 +1352,7 @@ export default function ProjectView({ projectId, companyProfile, onNavigate, onT
               )}
               {isMemoryThinking && (
                 <div className="flex justify-start">
-                  <div className="bg-bg-card border border-gray-700 p-4 rounded-xl flex items-center gap-3">
+                  <div className="bg-level-2 border border-gray-700 p-4 rounded-xl flex items-center gap-3">
                     <div className="w-4 h-4 bg-purple-500 rounded-full animate-pulse" />
                     <span className="text-gray-400 text-sm">Reasoning across {documents.length} documents...</span>
                   </div>
@@ -1360,7 +1360,7 @@ export default function ProjectView({ projectId, companyProfile, onNavigate, onT
               )}
             </div>
 
-            <div className="bg-bg-secondary p-4 rounded-xl border border-gray-700 flex gap-4">
+            <div className="bg-level-1 p-4 rounded-xl border border-gray-700 flex gap-4">
               <input
                 type="text"
                 value={memoryQuery}
@@ -1387,7 +1387,7 @@ export default function ProjectView({ projectId, companyProfile, onNavigate, onT
 
               {/* Negotiator Result Card (if active) */}
               {negotiationResult && (
-                <div className="bg-bg-card border border-gold/50 rounded-2xl p-8 shadow-[0_0_30px_rgba(255,215,0,0.1)]">
+                <div className="bg-level-2 border border-gold/50 rounded-2xl p-8 shadow-[0_0_30px_rgba(255,215,0,0.1)]">
                   <h3 className="text-xl font-bold mb-6 flex items-center gap-3 text-gold">
                     <span className="text-2xl">🤝</span> Negotiator Agent Results
                   </h3>
@@ -1398,7 +1398,7 @@ export default function ProjectView({ projectId, companyProfile, onNavigate, onT
 
                   <div className="space-y-4">
                     {negotiationResult.emails.map((email, idx) => (
-                      <div key={idx} className="bg-bg-secondary rounded-xl p-6 border border-gray-700">
+                      <div key={idx} className="bg-level-1 rounded-xl p-6 border border-gray-700">
                         <div className="flex justify-between items-start mb-4">
                           <div>
                             <div className="font-bold text-lg text-white">{email.vendorName}</div>
@@ -1428,7 +1428,7 @@ export default function ProjectView({ projectId, companyProfile, onNavigate, onT
                 </div>
               )}
 
-              <div className="bg-bg-card border border-gray-700 rounded-2xl p-8 text-center">
+              <div className="bg-level-2 border border-gray-700 rounded-2xl p-8 text-center">
                 <div className="w-20 h-20 bg-blue-900/30 rounded-full flex items-center justify-center mx-auto mb-6">
                   <span className="text-4xl">📹</span>
                 </div>
@@ -1450,7 +1450,7 @@ export default function ProjectView({ projectId, companyProfile, onNavigate, onT
                     <p className="text-sm text-gray-500 mt-2">MP4, MOV, WEBM up to 500MB</p>
                   </label>
                 ) : (
-                  <div className="max-w-md mx-auto bg-bg-secondary p-6 rounded-xl border border-gray-700">
+                  <div className="max-w-md mx-auto bg-level-1 p-6 rounded-xl border border-gray-700">
                     <div className="flex items-center gap-4 mb-6">
                       <span className="text-3xl">🎬</span>
                       <div className="text-left flex-1 min-w-0">
@@ -1481,7 +1481,7 @@ export default function ProjectView({ projectId, companyProfile, onNavigate, onT
               </div>
 
               {videoAnalysis && (
-                <div className="bg-bg-card border border-gray-700 rounded-2xl p-8">
+                <div className="bg-level-2 border border-gray-700 rounded-2xl p-8">
                   <h3 className="text-xl font-bold mb-6 flex items-center gap-3">
                     <span className="text-emerald-400">✓</span> Analysis Results
                   </h3>
@@ -1509,7 +1509,7 @@ export default function ProjectView({ projectId, companyProfile, onNavigate, onT
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 {/* Feature 1: Vision */}
-                <div className="bg-bg-card border border-gray-700 rounded-2xl p-6 hover:border-blue-500/50 transition-all group">
+                <div className="bg-level-2 border border-gray-700 rounded-2xl p-6 hover:border-blue-500/50 transition-all group">
                   <div className="w-16 h-16 bg-blue-900/20 rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform">
                     👁️
                   </div>
@@ -1532,7 +1532,7 @@ export default function ProjectView({ projectId, companyProfile, onNavigate, onT
                 </div>
 
                 {/* Feature 2: Brain */}
-                <div className="bg-bg-card border border-gray-700 rounded-2xl p-6 hover:border-purple-500/50 transition-all group">
+                <div className="bg-level-2 border border-gray-700 rounded-2xl p-6 hover:border-purple-500/50 transition-all group">
                   <div className="w-16 h-16 bg-purple-900/20 rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform">
                     🧠
                   </div>
@@ -1549,7 +1549,7 @@ export default function ProjectView({ projectId, companyProfile, onNavigate, onT
                 </div>
 
                 {/* Feature 3: Agents */}
-                <div className="bg-bg-card border border-gray-700 rounded-2xl p-6 hover:border-green-500/50 transition-all group">
+                <div className="bg-level-2 border border-gray-700 rounded-2xl p-6 hover:border-green-500/50 transition-all group">
                   <div className="w-16 h-16 bg-green-900/20 rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform">
                     🤖
                   </div>
@@ -1567,7 +1567,7 @@ export default function ProjectView({ projectId, companyProfile, onNavigate, onT
               </div>
 
               {/* Status Section */}
-              <div className="mt-12 bg-bg-secondary rounded-2xl p-8 border border-gray-700">
+              <div className="mt-12 bg-level-1 rounded-2xl p-8 border border-gray-700">
                 <h3 className="text-lg font-bold mb-4">System Status</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                   <div className="flex items-center gap-3 p-3 bg-black/20 rounded-lg">
@@ -1599,7 +1599,7 @@ export default function ProjectView({ projectId, companyProfile, onNavigate, onT
               {/* Left Column - Documents & Upload */}
               <div className="lg:col-span-1 space-y-6">
                 {/* Upload Area */}
-                <div className="bg-bg-card rounded-2xl border border-gray-700 p-6">
+                <div className="bg-level-2 rounded-2xl border border-gray-700 p-6">
                   <h3 className="text-lg font-semibold mb-4">📁 Documents</h3>
 
                   {/* Vision Status Indicator */}
@@ -1623,7 +1623,7 @@ export default function ProjectView({ projectId, companyProfile, onNavigate, onT
                   )}
 
                   <label
-                    className="block p-8 bg-bg-secondary border-2 border-dashed border-gray-600 rounded-xl cursor-pointer hover:border-gold/50 transition-colors text-center"
+                    className="block p-8 bg-level-1 border-2 border-dashed border-gray-600 rounded-xl cursor-pointer hover:border-gold/50 transition-colors text-center"
                     onDrop={(e) => { e.preventDefault(); handleFileUpload(e.dataTransfer.files); }}
                     onDragOver={(e) => e.preventDefault()}
                   >
@@ -1680,7 +1680,7 @@ export default function ProjectView({ projectId, companyProfile, onNavigate, onT
                         const pageCount = doc.visionData?.pageCount || 0;
 
                         return (
-                          <div key={i} className="flex items-center justify-between p-3 bg-bg-secondary rounded-lg">
+                          <div key={i} className="flex items-center justify-between p-3 bg-level-1 rounded-lg">
                             <div className="flex items-center gap-3 min-w-0 flex-1">
                               <span className="text-lg">
                                 {isBlueprint ? '📐' : doc.filename?.endsWith('.pdf') ? '📄' : '📊'}
@@ -1720,11 +1720,11 @@ export default function ProjectView({ projectId, companyProfile, onNavigate, onT
 
                 {/* Systems Detected */}
                 {project.systems && project.systems.length > 0 && (
-                  <div className="bg-bg-card rounded-2xl border border-gray-700 p-6">
+                  <div className="bg-level-2 rounded-2xl border border-gray-700 p-6">
                     <h3 className="text-lg font-semibold mb-4">🔧 Systems Detected</h3>
                     <div className="space-y-2">
                       {project.systems.map(system => (
-                        <div key={system} className="flex items-center gap-3 p-3 bg-bg-secondary rounded-lg">
+                        <div key={system} className="flex items-center gap-3 p-3 bg-level-1 rounded-lg">
                           <span className="text-lg">
                             {system === 'fireAlarm' ? '🔥' :
                               system === 'dataCabling' ? '🌐' :
@@ -1747,7 +1747,7 @@ export default function ProjectView({ projectId, companyProfile, onNavigate, onT
 
               {/* Right Column - Analysis */}
               <div className="lg:col-span-2">
-                <div className="bg-bg-card rounded-2xl border border-gray-700 p-6 h-full overflow-auto">
+                <div className="bg-level-2 rounded-2xl border border-gray-700 p-6 h-full overflow-auto">
                   <div className="flex items-center justify-between mb-6">
                     <h3 className="text-lg font-semibold">📊 Project Analysis</h3>
                     {project.analysis && (
@@ -1769,7 +1769,7 @@ export default function ProjectView({ projectId, companyProfile, onNavigate, onT
                         </button>
                         <button
                           onClick={() => setActiveTab('chat')}
-                          className="px-4 py-2 bg-bg-secondary border border-gray-600 rounded-lg text-sm hover:border-gold transition-colors"
+                          className="px-4 py-2 bg-level-1 border border-gray-600 rounded-lg text-sm hover:border-gold transition-colors"
                         >
                           💬 Ask Questions
                         </button>
@@ -1818,7 +1818,7 @@ export default function ProjectView({ projectId, companyProfile, onNavigate, onT
                         <button
                           key={i}
                           onClick={() => handleSendMessage(suggestion)}
-                          className="px-4 py-2 bg-bg-card border border-gray-700 rounded-xl text-sm text-gray-400 hover:text-white hover:border-gold/50 transition-all"
+                          className="px-4 py-2 bg-level-2 border border-gray-700 rounded-xl text-sm text-gray-400 hover:text-white hover:border-gold/50 transition-all"
                         >
                           {suggestion}
                         </button>
@@ -1837,7 +1837,7 @@ export default function ProjectView({ projectId, companyProfile, onNavigate, onT
                             ? 'gradient-gold text-black rounded-br-sm'
                             : msg.isError
                               ? 'bg-red-500/20 border border-red-500/50 text-red-300 rounded-bl-sm'
-                              : 'bg-bg-card border border-gray-700 text-white rounded-bl-sm'
+                              : 'bg-level-2 border border-gray-700 text-white rounded-bl-sm'
                             }`}
                         >
                           {msg.role === 'user' ? (
@@ -1873,7 +1873,7 @@ export default function ProjectView({ projectId, companyProfile, onNavigate, onT
                     ))}
 
                     {isChatting && (
-                      <div className="flex items-center gap-3 px-5 py-4 bg-bg-card border border-gray-700 rounded-2xl w-fit">
+                      <div className="flex items-center gap-3 px-5 py-4 bg-level-2 border border-gray-700 rounded-2xl w-fit">
                         <div className="w-2 h-2 bg-gold rounded-full animate-pulse" />
                         <span className="text-gray-400 text-sm">Thinking...</span>
                       </div>
@@ -1886,7 +1886,7 @@ export default function ProjectView({ projectId, companyProfile, onNavigate, onT
                           <button
                             key={i}
                             onClick={() => handleActionClick(action)}
-                            className="px-4 py-2 bg-bg-card border border-gray-700 rounded-xl text-sm hover:border-gold/50 transition-all flex items-center gap-2"
+                            className="px-4 py-2 bg-level-2 border border-gray-700 rounded-xl text-sm hover:border-gold/50 transition-all flex items-center gap-2"
                           >
                             <span>{action.icon}</span>
                             <span>{action.label}</span>
@@ -1902,7 +1902,7 @@ export default function ProjectView({ projectId, companyProfile, onNavigate, onT
             </div>
 
             {/* Chat Input */}
-            <div className="border-t border-gray-700 p-6 bg-bg-secondary">
+            <div className="border-t border-gray-700 p-6 bg-level-1">
               <form
                 onSubmit={(e) => { e.preventDefault(); handleSendMessage(); }}
                 className="max-w-4xl mx-auto flex gap-3"
@@ -1913,7 +1913,7 @@ export default function ProjectView({ projectId, companyProfile, onNavigate, onT
                   onChange={(e) => setChatInput(e.target.value)}
                   placeholder="Ask anything about your project..."
                   disabled={isChatting}
-                  className="flex-1 px-5 py-4 bg-bg-tertiary border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:border-gold transition-colors disabled:opacity-50"
+                  className="flex-1 px-5 py-4 bg-level-2 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:border-gold transition-colors disabled:opacity-50"
                 />
                 <button
                   type="submit"
@@ -1990,7 +1990,7 @@ export default function ProjectView({ projectId, companyProfile, onNavigate, onT
                             key={output.id}
                             onClick={() => handleGenerateOutput(output.id)}
                             disabled={generatingOutput === output.id || !project.analysis}
-                            className={`p-3 bg-bg-card border rounded-xl text-center hover:border-gold/50 transition-all disabled:opacity-50 disabled:cursor-not-allowed group relative ${output.requiresVision ? 'border-blue-700/30 hover:border-blue-500/50' : 'border-gray-700'
+                            className={`p-3 bg-level-2 border rounded-xl text-center hover:border-gold/50 transition-all disabled:opacity-50 disabled:cursor-not-allowed group relative ${output.requiresVision ? 'border-blue-700/30 hover:border-blue-500/50' : 'border-gray-700'
                               }`}
                           >
                             <div className="text-2xl mb-1 group-hover:scale-110 transition-transform">
@@ -2026,7 +2026,7 @@ export default function ProjectView({ projectId, companyProfile, onNavigate, onT
                 <div className="space-y-6">
                   <h3 className="text-lg font-semibold">Generated Outputs</h3>
                   {outputs.map((output, i) => (
-                    <div key={i} className="bg-bg-card rounded-2xl border border-gray-700 overflow-hidden">
+                    <div key={i} className="bg-level-2 rounded-2xl border border-gray-700 overflow-hidden">
                       <div className="p-4 border-b border-gray-700 flex items-center justify-between">
                         <div className="flex items-center gap-3">
                           <span className="text-2xl">
@@ -2045,7 +2045,7 @@ export default function ProjectView({ projectId, companyProfile, onNavigate, onT
                               navigator.clipboard.writeText(output.content);
                               onToast?.('Copied to clipboard', 'success');
                             }}
-                            className="px-3 py-1.5 bg-bg-secondary border border-gray-600 rounded-lg text-sm hover:border-gold transition-colors"
+                            className="px-3 py-1.5 bg-level-1 border border-gray-600 rounded-lg text-sm hover:border-gold transition-colors"
                           >
                             📋 Copy
                           </button>
@@ -2103,7 +2103,7 @@ export default function ProjectView({ projectId, companyProfile, onNavigate, onT
               {/* Blueprint Pages Grid */}
               <div className="space-y-8">
                 {documents.filter(doc => doc.visionData?.pages?.length > 0).map((doc, docIdx) => (
-                  <div key={docIdx} className="bg-bg-card rounded-2xl border border-gray-700 overflow-hidden">
+                  <div key={docIdx} className="bg-level-2 rounded-2xl border border-gray-700 overflow-hidden">
                     <div className="p-4 border-b border-gray-700 flex items-center justify-between">
                       <div className="flex items-center gap-3">
                         <span className="text-2xl">📐</span>
@@ -2161,7 +2161,7 @@ export default function ProjectView({ projectId, companyProfile, onNavigate, onT
               </div>
 
               {/* Legend */}
-              <div className="mt-8 p-4 bg-bg-card rounded-xl border border-gray-700">
+              <div className="mt-8 p-4 bg-level-2 rounded-xl border border-gray-700">
                 <h4 className="font-semibold mb-3">Markup Tools Available:</h4>
                 <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3 text-sm">
                   <div className="flex items-center gap-2"><span>⬜</span> Rectangle</div>

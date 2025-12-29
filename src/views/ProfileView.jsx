@@ -7,7 +7,7 @@ export default function ProfileView({ onToast }) {
   const [saving, setSaving] = useState(false);
   const [activeTab, setActiveTab] = useState('api');
   const logoInputRef = useRef(null);
-  
+
   // API Key state
   const [apiKeyStatus, setApiKeyStatus] = useState({ configured: false, preview: null });
   const [newApiKey, setNewApiKey] = useState('');
@@ -64,7 +64,7 @@ export default function ProfileView({ onToast }) {
 
   const handleTestApiKey = async () => {
     const keyToTest = newApiKey.trim() || null;
-    
+
     setTestingKey(true);
     try {
       await api.testApiKey(keyToTest);
@@ -172,11 +172,10 @@ export default function ProfileView({ onToast }) {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`px-5 py-3 rounded-xl font-medium whitespace-nowrap transition-all ${
-                activeTab === tab.id
+              className={`px-5 py-3 rounded-xl font-medium whitespace-nowrap transition-all ${activeTab === tab.id
                   ? 'bg-gold text-black'
-                  : 'bg-bg-card border border-gray-700 text-gray-400 hover:text-white hover:border-gray-600'
-              }`}
+                  : 'bg-level-2 border border-gray-700 text-gray-400 hover:text-white hover:border-gray-600'
+                }`}
             >
               <span className="mr-2">{tab.icon}</span>
               {tab.label}
@@ -185,7 +184,7 @@ export default function ProfileView({ onToast }) {
         </div>
 
         {/* Tab Content */}
-        <div className="bg-bg-card rounded-2xl border border-gray-700 p-8">
+        <div className="bg-level-2 rounded-2xl border border-gray-700 p-8">
           {/* API Settings Tab */}
           {activeTab === 'api' && (
             <div className="space-y-8">
@@ -195,24 +194,21 @@ export default function ProfileView({ onToast }) {
               </div>
 
               {/* Current Status */}
-              <div className={`p-5 rounded-xl border ${
-                apiKeyStatus.configured 
-                  ? 'bg-emerald-500/10 border-emerald-500/30' 
+              <div className={`p-5 rounded-xl border ${apiKeyStatus.configured
+                  ? 'bg-emerald-500/10 border-emerald-500/30'
                   : 'bg-yellow-500/10 border-yellow-500/30'
-              }`}>
+                }`}>
                 <div className="flex items-center gap-3 mb-2">
-                  <span className={`w-3 h-3 rounded-full ${
-                    apiKeyStatus.configured ? 'bg-emerald-400' : 'bg-yellow-400'
-                  }`} />
-                  <span className={`font-semibold ${
-                    apiKeyStatus.configured ? 'text-emerald-400' : 'text-yellow-400'
-                  }`}>
+                  <span className={`w-3 h-3 rounded-full ${apiKeyStatus.configured ? 'bg-emerald-400' : 'bg-yellow-400'
+                    }`} />
+                  <span className={`font-semibold ${apiKeyStatus.configured ? 'text-emerald-400' : 'text-yellow-400'
+                    }`}>
                     {apiKeyStatus.configured ? 'API Key Configured' : 'API Key Not Configured'}
                   </span>
                 </div>
                 {apiKeyStatus.configured && apiKeyStatus.preview && (
                   <p className="text-sm text-gray-400 ml-6">
-                    Current key: <code className="bg-bg-secondary px-2 py-0.5 rounded">{apiKeyStatus.preview}</code>
+                    Current key: <code className="bg-level-1 px-2 py-0.5 rounded">{apiKeyStatus.preview}</code>
                   </p>
                 )}
               </div>
@@ -229,7 +225,7 @@ export default function ProfileView({ onToast }) {
                       value={newApiKey}
                       onChange={(e) => setNewApiKey(e.target.value)}
                       placeholder="sk-ant-api03-..."
-                      className="w-full px-4 py-3 bg-bg-secondary border border-gray-700 rounded-xl text-white font-mono text-sm focus:border-gold transition-colors pr-12"
+                      className="w-full px-4 py-3 bg-level-1 border border-gray-700 rounded-xl text-white font-mono text-sm focus:border-gold transition-colors pr-12"
                     />
                     <button
                       type="button"
@@ -242,9 +238,9 @@ export default function ProfileView({ onToast }) {
                 </div>
                 <p className="text-xs text-gray-500 mt-2">
                   Get your API key from{' '}
-                  <a 
-                    href="https://console.anthropic.com/settings/keys" 
-                    target="_blank" 
+                  <a
+                    href="https://console.anthropic.com/settings/keys"
+                    target="_blank"
                     rel="noopener noreferrer"
                     className="text-gold hover:underline"
                   >
@@ -258,7 +254,7 @@ export default function ProfileView({ onToast }) {
                 <button
                   onClick={handleTestApiKey}
                   disabled={testingKey}
-                  className="px-5 py-3 bg-bg-secondary border border-gray-600 rounded-xl font-medium hover:border-gold transition-colors disabled:opacity-50"
+                  className="px-5 py-3 bg-level-1 border border-gray-600 rounded-xl font-medium hover:border-gold transition-colors disabled:opacity-50"
                 >
                   {testingKey ? '⏳ Testing...' : '🧪 Test Connection'}
                 </button>
@@ -288,7 +284,7 @@ export default function ProfileView({ onToast }) {
           {activeTab === 'company' && (
             <div className="space-y-6">
               <h2 className="text-xl font-semibold mb-6">Company Information</h2>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="md:col-span-2">
                   <label className="block text-sm text-gray-400 mb-2">Company Name</label>
@@ -297,10 +293,10 @@ export default function ProfileView({ onToast }) {
                     value={profile?.companyName || ''}
                     onChange={(e) => updateField('companyName', e.target.value)}
                     placeholder="3D Technology Services"
-                    className="w-full px-4 py-3 bg-bg-secondary border border-gray-700 rounded-xl text-white focus:border-gold transition-colors"
+                    className="w-full px-4 py-3 bg-level-1 border border-gray-700 rounded-xl text-white focus:border-gold transition-colors"
                   />
                 </div>
-                
+
                 <div className="md:col-span-2">
                   <label className="block text-sm text-gray-400 mb-2">Street Address</label>
                   <input
@@ -308,10 +304,10 @@ export default function ProfileView({ onToast }) {
                     value={profile?.address || ''}
                     onChange={(e) => updateField('address', e.target.value)}
                     placeholder="123 Technology Drive"
-                    className="w-full px-4 py-3 bg-bg-secondary border border-gray-700 rounded-xl text-white focus:border-gold transition-colors"
+                    className="w-full px-4 py-3 bg-level-1 border border-gray-700 rounded-xl text-white focus:border-gold transition-colors"
                   />
                 </div>
-                
+
                 <div>
                   <label className="block text-sm text-gray-400 mb-2">City</label>
                   <input
@@ -319,10 +315,10 @@ export default function ProfileView({ onToast }) {
                     value={profile?.city || ''}
                     onChange={(e) => updateField('city', e.target.value)}
                     placeholder="San Francisco"
-                    className="w-full px-4 py-3 bg-bg-secondary border border-gray-700 rounded-xl text-white focus:border-gold transition-colors"
+                    className="w-full px-4 py-3 bg-level-1 border border-gray-700 rounded-xl text-white focus:border-gold transition-colors"
                   />
                 </div>
-                
+
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm text-gray-400 mb-2">State</label>
@@ -331,7 +327,7 @@ export default function ProfileView({ onToast }) {
                       value={profile?.state || ''}
                       onChange={(e) => updateField('state', e.target.value)}
                       placeholder="CA"
-                      className="w-full px-4 py-3 bg-bg-secondary border border-gray-700 rounded-xl text-white focus:border-gold transition-colors"
+                      className="w-full px-4 py-3 bg-level-1 border border-gray-700 rounded-xl text-white focus:border-gold transition-colors"
                     />
                   </div>
                   <div>
@@ -341,11 +337,11 @@ export default function ProfileView({ onToast }) {
                       value={profile?.zip || ''}
                       onChange={(e) => updateField('zip', e.target.value)}
                       placeholder="94105"
-                      className="w-full px-4 py-3 bg-bg-secondary border border-gray-700 rounded-xl text-white focus:border-gold transition-colors"
+                      className="w-full px-4 py-3 bg-level-1 border border-gray-700 rounded-xl text-white focus:border-gold transition-colors"
                     />
                   </div>
                 </div>
-                
+
                 <div>
                   <label className="block text-sm text-gray-400 mb-2">Phone</label>
                   <input
@@ -353,10 +349,10 @@ export default function ProfileView({ onToast }) {
                     value={profile?.phone || ''}
                     onChange={(e) => updateField('phone', e.target.value)}
                     placeholder="(555) 123-4567"
-                    className="w-full px-4 py-3 bg-bg-secondary border border-gray-700 rounded-xl text-white focus:border-gold transition-colors"
+                    className="w-full px-4 py-3 bg-level-1 border border-gray-700 rounded-xl text-white focus:border-gold transition-colors"
                   />
                 </div>
-                
+
                 <div>
                   <label className="block text-sm text-gray-400 mb-2">Email</label>
                   <input
@@ -364,10 +360,10 @@ export default function ProfileView({ onToast }) {
                     value={profile?.email || ''}
                     onChange={(e) => updateField('email', e.target.value)}
                     placeholder="info@3dtsi.com"
-                    className="w-full px-4 py-3 bg-bg-secondary border border-gray-700 rounded-xl text-white focus:border-gold transition-colors"
+                    className="w-full px-4 py-3 bg-level-1 border border-gray-700 rounded-xl text-white focus:border-gold transition-colors"
                   />
                 </div>
-                
+
                 <div>
                   <label className="block text-sm text-gray-400 mb-2">Website</label>
                   <input
@@ -375,10 +371,10 @@ export default function ProfileView({ onToast }) {
                     value={profile?.website || ''}
                     onChange={(e) => updateField('website', e.target.value)}
                     placeholder="https://www.3dtsi.com"
-                    className="w-full px-4 py-3 bg-bg-secondary border border-gray-700 rounded-xl text-white focus:border-gold transition-colors"
+                    className="w-full px-4 py-3 bg-level-1 border border-gray-700 rounded-xl text-white focus:border-gold transition-colors"
                   />
                 </div>
-                
+
                 <div>
                   <label className="block text-sm text-gray-400 mb-2">Contractor License #</label>
                   <input
@@ -386,7 +382,7 @@ export default function ProfileView({ onToast }) {
                     value={profile?.license || ''}
                     onChange={(e) => updateField('license', e.target.value)}
                     placeholder="C-7 #123456"
-                    className="w-full px-4 py-3 bg-bg-secondary border border-gray-700 rounded-xl text-white focus:border-gold transition-colors"
+                    className="w-full px-4 py-3 bg-level-1 border border-gray-700 rounded-xl text-white focus:border-gold transition-colors"
                   />
                 </div>
               </div>
@@ -397,7 +393,7 @@ export default function ProfileView({ onToast }) {
           {activeTab === 'contact' && (
             <div className="space-y-6">
               <h2 className="text-xl font-semibold mb-6">Primary Contact</h2>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm text-gray-400 mb-2">Contact Name</label>
@@ -406,10 +402,10 @@ export default function ProfileView({ onToast }) {
                     value={profile?.contactName || ''}
                     onChange={(e) => updateField('contactName', e.target.value)}
                     placeholder="John Smith"
-                    className="w-full px-4 py-3 bg-bg-secondary border border-gray-700 rounded-xl text-white focus:border-gold transition-colors"
+                    className="w-full px-4 py-3 bg-level-1 border border-gray-700 rounded-xl text-white focus:border-gold transition-colors"
                   />
                 </div>
-                
+
                 <div>
                   <label className="block text-sm text-gray-400 mb-2">Title</label>
                   <input
@@ -417,10 +413,10 @@ export default function ProfileView({ onToast }) {
                     value={profile?.contactTitle || ''}
                     onChange={(e) => updateField('contactTitle', e.target.value)}
                     placeholder="Senior Estimator"
-                    className="w-full px-4 py-3 bg-bg-secondary border border-gray-700 rounded-xl text-white focus:border-gold transition-colors"
+                    className="w-full px-4 py-3 bg-level-1 border border-gray-700 rounded-xl text-white focus:border-gold transition-colors"
                   />
                 </div>
-                
+
                 <div>
                   <label className="block text-sm text-gray-400 mb-2">Direct Phone</label>
                   <input
@@ -428,10 +424,10 @@ export default function ProfileView({ onToast }) {
                     value={profile?.contactPhone || ''}
                     onChange={(e) => updateField('contactPhone', e.target.value)}
                     placeholder="(555) 123-4568"
-                    className="w-full px-4 py-3 bg-bg-secondary border border-gray-700 rounded-xl text-white focus:border-gold transition-colors"
+                    className="w-full px-4 py-3 bg-level-1 border border-gray-700 rounded-xl text-white focus:border-gold transition-colors"
                   />
                 </div>
-                
+
                 <div>
                   <label className="block text-sm text-gray-400 mb-2">Direct Email</label>
                   <input
@@ -439,7 +435,7 @@ export default function ProfileView({ onToast }) {
                     value={profile?.contactEmail || ''}
                     onChange={(e) => updateField('contactEmail', e.target.value)}
                     placeholder="jsmith@3dtsi.com"
-                    className="w-full px-4 py-3 bg-bg-secondary border border-gray-700 rounded-xl text-white focus:border-gold transition-colors"
+                    className="w-full px-4 py-3 bg-level-1 border border-gray-700 rounded-xl text-white focus:border-gold transition-colors"
                   />
                 </div>
               </div>
@@ -450,16 +446,16 @@ export default function ProfileView({ onToast }) {
           {activeTab === 'branding' && (
             <div className="space-y-8">
               <h2 className="text-xl font-semibold mb-6">Branding & Logo</h2>
-              
+
               {/* Logo Upload */}
               <div>
                 <label className="block text-sm text-gray-400 mb-4">Company Logo</label>
                 <div className="flex items-start gap-6">
-                  <div className="w-48 h-32 bg-bg-secondary border-2 border-dashed border-gray-600 rounded-xl flex items-center justify-center overflow-hidden">
+                  <div className="w-48 h-32 bg-level-1 border-2 border-dashed border-gray-600 rounded-xl flex items-center justify-center overflow-hidden">
                     {profile?.logoUrl ? (
-                      <img 
-                        src={profile.logoUrl} 
-                        alt="Company Logo" 
+                      <img
+                        src={profile.logoUrl}
+                        alt="Company Logo"
                         className="max-w-full max-h-full object-contain"
                       />
                     ) : (
@@ -469,7 +465,7 @@ export default function ProfileView({ onToast }) {
                       </div>
                     )}
                   </div>
-                  
+
                   <div className="flex flex-col gap-3">
                     <input
                       ref={logoInputRef}
@@ -480,7 +476,7 @@ export default function ProfileView({ onToast }) {
                     />
                     <button
                       onClick={() => logoInputRef.current?.click()}
-                      className="px-5 py-2.5 bg-bg-secondary border border-gray-600 rounded-lg text-sm hover:border-gold transition-colors"
+                      className="px-5 py-2.5 bg-level-1 border border-gray-600 rounded-lg text-sm hover:border-gold transition-colors"
                     >
                       📤 Upload Logo
                     </button>
@@ -498,7 +494,7 @@ export default function ProfileView({ onToast }) {
                   </div>
                 </div>
               </div>
-              
+
               {/* Brand Colors */}
               <div>
                 <label className="block text-sm text-gray-400 mb-4">Brand Colors</label>
@@ -516,11 +512,11 @@ export default function ProfileView({ onToast }) {
                         type="text"
                         value={profile?.primaryColor || '#FFB81C'}
                         onChange={(e) => updateField('primaryColor', e.target.value)}
-                        className="w-28 px-3 py-2 bg-bg-secondary border border-gray-700 rounded-lg text-sm font-mono"
+                        className="w-28 px-3 py-2 bg-level-1 border border-gray-700 rounded-lg text-sm font-mono"
                       />
                     </div>
                   </div>
-                  
+
                   <div>
                     <label className="block text-xs text-gray-500 mb-2">Secondary Color</label>
                     <div className="flex items-center gap-3">
@@ -534,7 +530,7 @@ export default function ProfileView({ onToast }) {
                         type="text"
                         value={profile?.secondaryColor || '#17B2B2'}
                         onChange={(e) => updateField('secondaryColor', e.target.value)}
-                        className="w-28 px-3 py-2 bg-bg-secondary border border-gray-700 rounded-lg text-sm font-mono"
+                        className="w-28 px-3 py-2 bg-level-1 border border-gray-700 rounded-lg text-sm font-mono"
                       />
                     </div>
                   </div>
@@ -549,17 +545,17 @@ export default function ProfileView({ onToast }) {
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-xl font-semibold">Labor Rates</h2>
                 <div className="text-sm text-gray-400">
-                  Burden Rate: 
+                  Burden Rate:
                   <input
                     type="number"
                     value={profile?.burdenRate || 55}
                     onChange={(e) => updateField('burdenRate', parseFloat(e.target.value))}
-                    className="w-16 ml-2 px-2 py-1 bg-bg-secondary border border-gray-700 rounded text-center"
+                    className="w-16 ml-2 px-2 py-1 bg-level-1 border border-gray-700 rounded text-center"
                   />
                   %
                 </div>
               </div>
-              
+
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
@@ -581,7 +577,7 @@ export default function ProfileView({ onToast }) {
                               type="number"
                               value={rates.base}
                               onChange={(e) => updateNestedField('laborRates', role, { ...rates, base: parseFloat(e.target.value) })}
-                              className="w-24 mx-auto block px-3 py-2 bg-bg-secondary border border-gray-700 rounded-lg text-center"
+                              className="w-24 mx-auto block px-3 py-2 bg-level-1 border border-gray-700 rounded-lg text-center"
                             />
                           </td>
                           <td className="py-4">
@@ -589,7 +585,7 @@ export default function ProfileView({ onToast }) {
                               type="number"
                               value={rates.sell}
                               onChange={(e) => updateNestedField('laborRates', role, { ...rates, sell: parseFloat(e.target.value) })}
-                              className="w-24 mx-auto block px-3 py-2 bg-bg-secondary border border-gray-700 rounded-lg text-center"
+                              className="w-24 mx-auto block px-3 py-2 bg-level-1 border border-gray-700 rounded-lg text-center"
                             />
                           </td>
                           <td className="py-4 text-center">
@@ -610,10 +606,10 @@ export default function ProfileView({ onToast }) {
           {activeTab === 'margins' && (
             <div className="space-y-6">
               <h2 className="text-xl font-semibold mb-6">Default Margins by System</h2>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {Object.entries(profile?.margins || {}).map(([system, margin]) => (
-                  <div key={system} className="bg-bg-secondary rounded-xl p-4 border border-gray-700">
+                  <div key={system} className="bg-level-1 rounded-xl p-4 border border-gray-700">
                     <label className="block text-sm text-gray-400 mb-2 capitalize">
                       {system.replace(/([A-Z])/g, ' $1').trim()}
                     </label>
@@ -631,7 +627,7 @@ export default function ProfileView({ onToast }) {
                   </div>
                 ))}
               </div>
-              
+
               <div className="mt-6 p-4 bg-blue-500/10 border border-blue-500/30 rounded-xl">
                 <p className="text-sm text-blue-400">
                   💡 These margins are applied to material costs when generating estimates. Adjust based on project complexity and competition.
@@ -644,7 +640,7 @@ export default function ProfileView({ onToast }) {
           {activeTab === 'defaults' && (
             <div className="space-y-8">
               <h2 className="text-xl font-semibold mb-6">Default Settings</h2>
-              
+
               {/* Terms */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div>
@@ -654,10 +650,10 @@ export default function ProfileView({ onToast }) {
                     value={profile?.paymentTerms || ''}
                     onChange={(e) => updateField('paymentTerms', e.target.value)}
                     placeholder="Net 30"
-                    className="w-full px-4 py-3 bg-bg-secondary border border-gray-700 rounded-xl text-white focus:border-gold transition-colors"
+                    className="w-full px-4 py-3 bg-level-1 border border-gray-700 rounded-xl text-white focus:border-gold transition-colors"
                   />
                 </div>
-                
+
                 <div>
                   <label className="block text-sm text-gray-400 mb-2">Proposal Validity</label>
                   <input
@@ -665,10 +661,10 @@ export default function ProfileView({ onToast }) {
                     value={profile?.proposalValidity || ''}
                     onChange={(e) => updateField('proposalValidity', e.target.value)}
                     placeholder="30 days"
-                    className="w-full px-4 py-3 bg-bg-secondary border border-gray-700 rounded-xl text-white focus:border-gold transition-colors"
+                    className="w-full px-4 py-3 bg-level-1 border border-gray-700 rounded-xl text-white focus:border-gold transition-colors"
                   />
                 </div>
-                
+
                 <div>
                   <label className="block text-sm text-gray-400 mb-2">Warranty Period</label>
                   <input
@@ -676,10 +672,10 @@ export default function ProfileView({ onToast }) {
                     value={profile?.warrantyPeriod || ''}
                     onChange={(e) => updateField('warrantyPeriod', e.target.value)}
                     placeholder="1 year parts and labor"
-                    className="w-full px-4 py-3 bg-bg-secondary border border-gray-700 rounded-xl text-white focus:border-gold transition-colors"
+                    className="w-full px-4 py-3 bg-level-1 border border-gray-700 rounded-xl text-white focus:border-gold transition-colors"
                   />
                 </div>
-                
+
                 <div>
                   <label className="block text-sm text-gray-400 mb-2">Tax Rate (%)</label>
                   <input
@@ -687,11 +683,11 @@ export default function ProfileView({ onToast }) {
                     step="0.01"
                     value={profile?.taxRate || 8.25}
                     onChange={(e) => updateField('taxRate', parseFloat(e.target.value))}
-                    className="w-full px-4 py-3 bg-bg-secondary border border-gray-700 rounded-xl text-white focus:border-gold transition-colors"
+                    className="w-full px-4 py-3 bg-level-1 border border-gray-700 rounded-xl text-white focus:border-gold transition-colors"
                   />
                 </div>
               </div>
-              
+
               {/* Standard Exclusions */}
               <div>
                 <label className="block text-sm text-gray-400 mb-4">Standard Exclusions</label>
@@ -706,7 +702,7 @@ export default function ProfileView({ onToast }) {
                           newExclusions[i] = e.target.value;
                           updateField('standardExclusions', newExclusions);
                         }}
-                        className="flex-1 px-4 py-2 bg-bg-secondary border border-gray-700 rounded-lg text-sm focus:border-gold transition-colors"
+                        className="flex-1 px-4 py-2 bg-level-1 border border-gray-700 rounded-lg text-sm focus:border-gold transition-colors"
                       />
                       <button
                         onClick={() => {
@@ -721,7 +717,7 @@ export default function ProfileView({ onToast }) {
                   ))}
                   <button
                     onClick={() => updateField('standardExclusions', [...(profile?.standardExclusions || []), ''])}
-                    className="mt-3 px-4 py-2 bg-bg-secondary border border-dashed border-gray-600 rounded-lg text-sm text-gray-400 hover:border-gold hover:text-gold transition-colors"
+                    className="mt-3 px-4 py-2 bg-level-1 border border-dashed border-gray-600 rounded-lg text-sm text-gray-400 hover:border-gold hover:text-gold transition-colors"
                   >
                     + Add Exclusion
                   </button>

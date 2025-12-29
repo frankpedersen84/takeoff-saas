@@ -47,9 +47,9 @@ export default function ProjectsListView({ onNavigate, onToast }) {
       // Upload and process documents
       const formData = new FormData();
       fileArray.forEach(f => formData.append('files', f));
-      
+
       const uploadResponse = await api.uploadDocuments(formData);
-      
+
       if (uploadResponse.processed === 0) {
         throw new Error('Could not process any documents');
       }
@@ -59,9 +59,9 @@ export default function ProjectsListView({ onNavigate, onToast }) {
       // Extract project info using AI
       const extractResponse = await api.extractProjectInfo(uploadResponse.documents);
       const info = extractResponse.extractedInfo;
-      
+
       setExtractedInfo(info);
-      
+
       // Pre-fill the form with extracted data
       setNewProject({
         name: info.projectName || '',
@@ -73,7 +73,7 @@ export default function ProjectsListView({ onNavigate, onToast }) {
       });
 
       setModalStep('review');
-      
+
       if (info.confidence === 'high') {
         onToast?.('Project info extracted successfully!', 'success');
       } else if (info.confidence === 'medium') {
@@ -103,7 +103,7 @@ export default function ProjectsListView({ onNavigate, onToast }) {
 
       // If we have processed documents, add them to the project
       if (processedDocs.length > 0) {
-        await api.updateProject(projectId, { 
+        await api.updateProject(projectId, {
           documents: processedDocs,
           systems: extractedInfo?.systemsInScope || []
         });
@@ -112,7 +112,7 @@ export default function ProjectsListView({ onNavigate, onToast }) {
       setProjects(prev => [response.project, ...prev]);
       resetModal();
       onToast?.('Project created successfully', 'success');
-      
+
       // Navigate to the new project
       onNavigate('project', { projectId });
     } catch (error) {
@@ -221,7 +221,7 @@ export default function ProjectsListView({ onNavigate, onToast }) {
               <div
                 key={project.id}
                 onClick={() => onNavigate('project', { projectId: project.id })}
-                className="bg-bg-card rounded-2xl border border-gray-700 p-6 cursor-pointer transition-all hover:border-gold/50 hover:-translate-y-1 group"
+                className="bg-level-2 rounded-2xl border border-gray-700 p-6 cursor-pointer transition-all hover:border-gold/50 hover:-translate-y-1 group"
               >
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex-1 min-w-0">
@@ -258,12 +258,12 @@ export default function ProjectsListView({ onNavigate, onToast }) {
                 {project.systems && project.systems.length > 0 && (
                   <div className="flex flex-wrap gap-1.5 mb-4">
                     {project.systems.slice(0, 4).map(system => (
-                      <span key={system} className="px-2 py-0.5 bg-bg-secondary rounded text-xs text-gray-400">
+                      <span key={system} className="px-2 py-0.5 bg-level-1 rounded text-xs text-gray-400">
                         {system}
                       </span>
                     ))}
                     {project.systems.length > 4 && (
-                      <span className="px-2 py-0.5 bg-bg-secondary rounded text-xs text-gray-400">
+                      <span className="px-2 py-0.5 bg-level-1 rounded text-xs text-gray-400">
                         +{project.systems.length - 4}
                       </span>
                     )}
@@ -290,7 +290,7 @@ export default function ProjectsListView({ onNavigate, onToast }) {
       {/* New Project Modal */}
       {showNewProjectModal && (
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-          <div className="bg-bg-card rounded-2xl border border-gray-700 w-full max-w-2xl">
+          <div className="bg-level-2 rounded-2xl border border-gray-700 w-full max-w-2xl">
             {/* Modal Header */}
             <div className="p-6 border-b border-gray-700">
               <div className="flex items-center justify-between">
@@ -322,7 +322,7 @@ export default function ProjectsListView({ onNavigate, onToast }) {
               <>
                 <div className="p-8">
                   <label
-                    className="block p-12 bg-bg-secondary border-2 border-dashed border-gray-600 rounded-2xl cursor-pointer hover:border-gold/50 transition-colors text-center"
+                    className="block p-12 bg-level-1 border-2 border-dashed border-gray-600 rounded-2xl cursor-pointer hover:border-gold/50 transition-colors text-center"
                     onDrop={(e) => { e.preventDefault(); handleFileUpload(e.dataTransfer.files); }}
                     onDragOver={(e) => e.preventDefault()}
                   >
@@ -354,7 +354,7 @@ export default function ProjectsListView({ onNavigate, onToast }) {
                 <div className="p-6 border-t border-gray-700 flex justify-between">
                   <button
                     onClick={resetModal}
-                    className="px-5 py-2.5 bg-bg-secondary border border-gray-600 rounded-xl text-gray-400 hover:text-white transition-colors"
+                    className="px-5 py-2.5 bg-level-1 border border-gray-600 rounded-xl text-gray-400 hover:text-white transition-colors"
                   >
                     Cancel
                   </button>
@@ -374,9 +374,9 @@ export default function ProjectsListView({ onNavigate, onToast }) {
                 <div className="w-16 h-16 border-4 border-gold border-t-transparent rounded-full animate-spin mx-auto mb-6" />
                 <h3 className="text-lg font-semibold mb-2">AI is analyzing your documents</h3>
                 <p className="text-gray-400 mb-6">Extracting project name, customer, due date, and more...</p>
-                
+
                 {uploadedFiles.length > 0 && (
-                  <div className="bg-bg-secondary rounded-xl p-4 max-w-sm mx-auto">
+                  <div className="bg-level-1 rounded-xl p-4 max-w-sm mx-auto">
                     {uploadedFiles.map((file, i) => (
                       <div key={i} className="flex items-center gap-3 text-sm text-gray-400">
                         <span>📄</span>
@@ -394,13 +394,12 @@ export default function ProjectsListView({ onNavigate, onToast }) {
                 <div className="p-6 space-y-4 max-h-[60vh] overflow-y-auto">
                   {/* Extraction status */}
                   {extractedInfo && (
-                    <div className={`p-4 rounded-xl border mb-4 ${
-                      extractedInfo.confidence === 'high' 
-                        ? 'bg-emerald-500/10 border-emerald-500/30' 
+                    <div className={`p-4 rounded-xl border mb-4 ${extractedInfo.confidence === 'high'
+                        ? 'bg-emerald-500/10 border-emerald-500/30'
                         : extractedInfo.confidence === 'medium'
-                        ? 'bg-yellow-500/10 border-yellow-500/30'
-                        : 'bg-gray-500/10 border-gray-500/30'
-                    }`}>
+                          ? 'bg-yellow-500/10 border-yellow-500/30'
+                          : 'bg-gray-500/10 border-gray-500/30'
+                      }`}>
                       <div className="flex items-center gap-2 mb-1">
                         <span>{extractedInfo.confidence === 'high' ? '✅' : extractedInfo.confidence === 'medium' ? '⚠️' : 'ℹ️'}</span>
                         <span className="font-medium">
@@ -417,7 +416,7 @@ export default function ProjectsListView({ onNavigate, onToast }) {
 
                   {/* Uploaded files indicator */}
                   {processedDocs.length > 0 && (
-                    <div className="flex items-center gap-2 p-3 bg-bg-secondary rounded-lg mb-4">
+                    <div className="flex items-center gap-2 p-3 bg-level-1 rounded-lg mb-4">
                       <span className="text-emerald-400">✓</span>
                       <span className="text-sm text-gray-400">
                         {processedDocs.length} document{processedDocs.length > 1 ? 's' : ''} will be attached to this project
@@ -432,7 +431,7 @@ export default function ProjectsListView({ onNavigate, onToast }) {
                       value={newProject.name}
                       onChange={(e) => setNewProject(prev => ({ ...prev, name: e.target.value }))}
                       placeholder="The Ivy Apartments"
-                      className="w-full px-4 py-3 bg-bg-secondary border border-gray-700 rounded-xl text-white focus:border-gold transition-colors"
+                      className="w-full px-4 py-3 bg-level-1 border border-gray-700 rounded-xl text-white focus:border-gold transition-colors"
                       autoFocus
                     />
                   </div>
@@ -444,7 +443,7 @@ export default function ProjectsListView({ onNavigate, onToast }) {
                       value={newProject.customer}
                       onChange={(e) => setNewProject(prev => ({ ...prev, customer: e.target.value }))}
                       placeholder="CSI Construction"
-                      className="w-full px-4 py-3 bg-bg-secondary border border-gray-700 rounded-xl text-white focus:border-gold transition-colors"
+                      className="w-full px-4 py-3 bg-level-1 border border-gray-700 rounded-xl text-white focus:border-gold transition-colors"
                     />
                   </div>
 
@@ -456,7 +455,7 @@ export default function ProjectsListView({ onNavigate, onToast }) {
                         value={newProject.address}
                         onChange={(e) => setNewProject(prev => ({ ...prev, address: e.target.value }))}
                         placeholder="123 Main St"
-                        className="w-full px-4 py-3 bg-bg-secondary border border-gray-700 rounded-xl text-white focus:border-gold transition-colors"
+                        className="w-full px-4 py-3 bg-level-1 border border-gray-700 rounded-xl text-white focus:border-gold transition-colors"
                       />
                     </div>
                     <div>
@@ -466,7 +465,7 @@ export default function ProjectsListView({ onNavigate, onToast }) {
                         value={newProject.city}
                         onChange={(e) => setNewProject(prev => ({ ...prev, city: e.target.value }))}
                         placeholder="Danville, CA"
-                        className="w-full px-4 py-3 bg-bg-secondary border border-gray-700 rounded-xl text-white focus:border-gold transition-colors"
+                        className="w-full px-4 py-3 bg-level-1 border border-gray-700 rounded-xl text-white focus:border-gold transition-colors"
                       />
                     </div>
                   </div>
@@ -479,7 +478,7 @@ export default function ProjectsListView({ onNavigate, onToast }) {
                         value={newProject.contact}
                         onChange={(e) => setNewProject(prev => ({ ...prev, contact: e.target.value }))}
                         placeholder="John Smith"
-                        className="w-full px-4 py-3 bg-bg-secondary border border-gray-700 rounded-xl text-white focus:border-gold transition-colors"
+                        className="w-full px-4 py-3 bg-level-1 border border-gray-700 rounded-xl text-white focus:border-gold transition-colors"
                       />
                     </div>
                     <div>
@@ -488,7 +487,7 @@ export default function ProjectsListView({ onNavigate, onToast }) {
                         type="date"
                         value={newProject.dueDate}
                         onChange={(e) => setNewProject(prev => ({ ...prev, dueDate: e.target.value }))}
-                        className="w-full px-4 py-3 bg-bg-secondary border border-gray-700 rounded-xl text-white focus:border-gold transition-colors"
+                        className="w-full px-4 py-3 bg-level-1 border border-gray-700 rounded-xl text-white focus:border-gold transition-colors"
                       />
                     </div>
                   </div>
@@ -511,7 +510,7 @@ export default function ProjectsListView({ onNavigate, onToast }) {
                 <div className="p-6 border-t border-gray-700 flex justify-between">
                   <button
                     onClick={resetModal}
-                    className="px-5 py-2.5 bg-bg-secondary border border-gray-600 rounded-xl text-gray-400 hover:text-white transition-colors"
+                    className="px-5 py-2.5 bg-level-1 border border-gray-600 rounded-xl text-gray-400 hover:text-white transition-colors"
                   >
                     Cancel
                   </button>

@@ -1,13 +1,13 @@
 import React, { useRef } from 'react';
 
-export default function HomeView({ 
-  agents, 
-  uploadedFiles, 
-  projectInfo, 
-  onFileUpload, 
-  onProjectInfoChange, 
+export default function HomeView({
+  agents,
+  uploadedFiles,
+  projectInfo,
+  onFileUpload,
+  onProjectInfoChange,
   onProcess,
-  onRemoveFile 
+  onRemoveFile
 }) {
   const fileInputRef = useRef(null);
 
@@ -78,14 +78,14 @@ export default function HomeView({
 
           {/* Uploaded Files */}
           {uploadedFiles.length > 0 && (
-            <div className="mt-6 bg-bg-card rounded-2xl p-5 border border-gray-700">
+            <div className="mt-6 bg-level-2 rounded-2xl p-5 border border-gray-700">
               <h3 className="text-sm font-semibold text-gray-400 mb-4">
                 Uploaded Files ({uploadedFiles.length})
               </h3>
               {uploadedFiles.map((file, i) => (
                 <div
                   key={i}
-                  className="flex items-center justify-between p-3 bg-bg-secondary rounded-lg mb-2 last:mb-0"
+                  className="flex items-center justify-between p-3 bg-level-1 rounded-lg mb-2 last:mb-0"
                 >
                   <div className="flex items-center gap-3">
                     <span className="text-xl">
@@ -112,7 +112,7 @@ export default function HomeView({
 
           {/* Project Info */}
           {uploadedFiles.length > 0 && (
-            <div className="mt-6 bg-bg-card rounded-2xl p-6 border border-gray-700">
+            <div className="mt-6 bg-level-2 rounded-2xl p-6 border border-gray-700">
               <h3 className="text-base font-semibold mb-5">Project Information</h3>
               <div className="grid grid-cols-2 gap-4">
                 {projectFields.map(field => (
@@ -124,11 +124,11 @@ export default function HomeView({
                       type="text"
                       placeholder={field.placeholder}
                       value={projectInfo[field.key]}
-                      onChange={e => onProjectInfoChange(prev => ({ 
-                        ...prev, 
-                        [field.key]: e.target.value 
+                      onChange={e => onProjectInfoChange(prev => ({
+                        ...prev,
+                        [field.key]: e.target.value
                       }))}
-                      className="w-full px-4 py-3 bg-bg-secondary border border-gray-700 rounded-lg text-white text-sm focus:border-gold transition-colors"
+                      className="w-full px-4 py-3 bg-level-1 border border-gray-700 rounded-lg text-white text-sm focus:border-gold transition-colors"
                     />
                   </div>
                 ))}
@@ -149,13 +149,13 @@ export default function HomeView({
       </section>
 
       {/* Agents Preview */}
-      <section className="py-16 px-10 bg-bg-secondary">
+      <section className="py-16 px-10 bg-level-1">
         <h2 className="text-center text-3xl font-bold mb-12">Meet Your AI Agents</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 max-w-7xl mx-auto">
           {Object.values(agents).map(agent => (
             <div
               key={agent.id}
-              className="bg-bg-card rounded-2xl p-6 border transition-all duration-300 hover:-translate-y-1 cursor-pointer"
+              className="bg-level-2 rounded-2xl p-6 border transition-all duration-300 hover:-translate-y-1 cursor-pointer"
               style={{ borderColor: `${agent.color}33` }}
             >
               <div

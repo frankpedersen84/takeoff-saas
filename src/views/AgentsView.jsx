@@ -14,7 +14,7 @@ export default function AgentsView({ agents, onSelectAgent }) {
             <div
               key={agent.id}
               onClick={() => onSelectAgent(agent.id)}
-              className="bg-bg-card rounded-2xl p-7 border cursor-pointer transition-all duration-300 hover:-translate-y-1"
+              className="bg-level-2 rounded-2xl p-7 border cursor-pointer transition-all duration-300 hover:-translate-y-1"
               style={{ borderColor: `${agent.color}33` }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.borderColor = agent.color;

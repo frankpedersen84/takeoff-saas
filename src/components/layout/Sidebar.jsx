@@ -18,7 +18,7 @@ export default function Sidebar({ currentView, onNavigate, isAdvancedMode }) {
     ];
 
     return (
-        <aside className="fixed left-0 top-[70px] bottom-0 w-64 bg-bg-card border-r border-gold/10 flex flex-col z-40 transition-all duration-300">
+        <aside className="fixed left-0 top-[70px] bottom-0 w-64 bg-level-2 border-r border-gold/10 flex flex-col z-40 transition-all duration-300">
 
             {/* Main Navigation */}
             <div className="flex-1 py-6 px-3 space-y-1 overflow-y-auto">
@@ -30,8 +30,8 @@ export default function Sidebar({ currentView, onNavigate, isAdvancedMode }) {
                         key={item.id}
                         onClick={() => onNavigate(item.id)}
                         className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${currentView === item.id
-                                ? 'bg-gold/15 text-gold border border-gold/20'
-                                : 'text-gray-400 hover:text-white hover:bg-white/5'
+                            ? 'bg-gold/15 text-gold border border-gold/20'
+                            : 'text-gray-400 hover:text-white hover:bg-white/5'
                             }`}
                     >
                         <span className="text-lg">{item.icon}</span>
@@ -51,14 +51,14 @@ export default function Sidebar({ currentView, onNavigate, isAdvancedMode }) {
             </div>
 
             {/* Bottom Navigation */}
-            <div className="p-3 border-t border-gold/10 bg-bg-secondary/30">
+            <div className="p-3 border-t border-gold/10 bg-level-1/30">
                 {bottomItems.map((item) => (
                     <button
                         key={item.id}
                         onClick={() => onNavigate(item.id)}
                         className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${currentView === item.id
-                                ? 'bg-gold/15 text-gold border border-gold/20'
-                                : 'text-gray-400 hover:text-white hover:bg-white/5'
+                            ? 'bg-gold/15 text-gold border border-gold/20'
+                            : 'text-gray-400 hover:text-white hover:bg-white/5'
                             }`}
                     >
                         <span className="text-lg">{item.icon}</span>

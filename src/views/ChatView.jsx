@@ -39,10 +39,10 @@ export default function ChatView({ agent, chatHistory, isProcessing, onSendMessa
   return (
     <div className="pt-[70px] h-screen flex flex-col">
       {/* Chat Header */}
-      <div className="px-10 py-5 bg-bg-secondary border-b border-gray-700 flex items-center gap-4">
+      <div className="px-10 py-5 bg-level-1 border-b border-gray-700 flex items-center gap-4">
         <button
           onClick={onBack}
-          className="px-4 py-2 bg-bg-tertiary border border-gray-700 rounded-lg text-gray-400 text-sm hover:text-white transition-colors"
+          className="px-4 py-2 bg-level-2 border border-gray-700 rounded-lg text-gray-400 text-sm hover:text-white transition-colors"
         >
           ← Back
         </button>
@@ -98,13 +98,12 @@ export default function ChatView({ agent, chatHistory, isProcessing, onSendMessa
               className={`flex mb-4 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
             >
               <div
-                className={`max-w-[80%] px-5 py-4 rounded-2xl ${
-                  msg.role === 'user'
+                className={`max-w-[80%] px-5 py-4 rounded-2xl ${msg.role === 'user'
                     ? 'gradient-gold text-black rounded-br-sm'
                     : msg.isError
-                    ? 'bg-red-500/20 border border-red-500/50 text-red-300 rounded-bl-sm'
-                    : 'bg-bg-card border border-gray-700 text-white rounded-bl-sm'
-                }`}
+                      ? 'bg-red-500/20 border border-red-500/50 text-red-300 rounded-bl-sm'
+                      : 'bg-level-2 border border-gray-700 text-white rounded-bl-sm'
+                  }`}
               >
                 <div className="text-sm leading-relaxed whitespace-pre-wrap markdown-content">
                   {msg.content}
@@ -115,7 +114,7 @@ export default function ChatView({ agent, chatHistory, isProcessing, onSendMessa
         })}
 
         {isProcessing && (
-          <div className="flex items-center gap-3 px-5 py-4 bg-bg-card border border-gray-700 rounded-2xl w-fit">
+          <div className="flex items-center gap-3 px-5 py-4 bg-level-2 border border-gray-700 rounded-2xl w-fit">
             <div
               className="w-2 h-2 rounded-full animate-pulse"
               style={{ backgroundColor: agent.color }}
@@ -130,7 +129,7 @@ export default function ChatView({ agent, chatHistory, isProcessing, onSendMessa
       </div>
 
       {/* Chat Input */}
-      <form onSubmit={handleSubmit} className="px-10 py-5 bg-bg-secondary border-t border-gray-700">
+      <form onSubmit={handleSubmit} className="px-10 py-5 bg-level-1 border-t border-gray-700">
         <div className="flex gap-3 max-w-5xl mx-auto">
           <input
             type="text"
@@ -138,7 +137,7 @@ export default function ChatView({ agent, chatHistory, isProcessing, onSendMessa
             onChange={(e) => setInput(e.target.value)}
             placeholder={`Ask ${agent.name} anything...`}
             disabled={isProcessing}
-            className="flex-1 px-5 py-4 bg-bg-tertiary border border-gray-700 rounded-xl text-white text-[15px] placeholder-gray-500 focus:border-gold transition-colors disabled:opacity-50"
+            className="flex-1 px-5 py-4 bg-level-2 border border-gray-700 rounded-xl text-white text-[15px] placeholder-gray-500 focus:border-gold transition-colors disabled:opacity-50"
           />
           <button
             type="submit"

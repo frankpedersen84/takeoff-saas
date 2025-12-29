@@ -29,7 +29,7 @@ export default function BlueprintVisionView() {
 
   const handleFileSelect = (e) => {
     const files = Array.from(e.target.files);
-    const validFiles = files.filter(f => 
+    const validFiles = files.filter(f =>
       f.type.startsWith('image/') || f.type === 'application/pdf'
     );
 
@@ -66,7 +66,7 @@ export default function BlueprintVisionView() {
 
     try {
       let result;
-      
+
       if (selectedFiles.length === 1) {
         result = await api.analyzeFloorPlan(selectedFiles[0], analysisType, systemFocus);
       } else {
@@ -111,9 +111,9 @@ export default function BlueprintVisionView() {
           {/* Left Column - Upload & Settings */}
           <div className="col-span-1 space-y-5">
             {/* Upload Area */}
-            <div className="bg-bg-card rounded-2xl p-6 border border-gray-700">
+            <div className="bg-level-2 rounded-2xl p-6 border border-gray-700">
               <h3 className="text-lg font-semibold mb-4">Upload Floor Plans</h3>
-              
+
               <label className="block p-8 border-2 border-dashed border-indigo-500/30 rounded-xl cursor-pointer hover:border-indigo-500/50 hover:bg-indigo-500/5 transition-all text-center">
                 <input
                   ref={fileInputRef}
@@ -132,11 +132,11 @@ export default function BlueprintVisionView() {
               {selectedFiles.length > 0 && (
                 <div className="mt-4 space-y-2">
                   {previews.map((preview, i) => (
-                    <div key={i} className="flex items-center gap-3 p-2 bg-bg-secondary rounded-lg">
+                    <div key={i} className="flex items-center gap-3 p-2 bg-level-1 rounded-lg">
                       {preview.url ? (
                         <img src={preview.url} alt="" className="w-12 h-12 object-cover rounded" />
                       ) : (
-                        <div className="w-12 h-12 bg-bg-tertiary rounded flex items-center justify-center text-xl">
+                        <div className="w-12 h-12 bg-level-2 rounded flex items-center justify-center text-xl">
                           📄
                         </div>
                       )}
@@ -154,18 +154,17 @@ export default function BlueprintVisionView() {
             </div>
 
             {/* Analysis Type */}
-            <div className="bg-bg-card rounded-2xl p-6 border border-gray-700">
+            <div className="bg-level-2 rounded-2xl p-6 border border-gray-700">
               <h3 className="text-lg font-semibold mb-4">Analysis Type</h3>
               <div className="space-y-2">
                 {analysisTypes.map(type => (
                   <button
                     key={type.id}
                     onClick={() => setAnalysisType(type.id)}
-                    className={`w-full p-3 rounded-lg text-left transition-all ${
-                      analysisType === type.id
+                    className={`w-full p-3 rounded-lg text-left transition-all ${analysisType === type.id
                         ? 'bg-indigo-500/20 border border-indigo-500'
-                        : 'bg-bg-secondary border border-transparent hover:border-gray-600'
-                    }`}
+                        : 'bg-level-1 border border-transparent hover:border-gray-600'
+                      }`}
                   >
                     <div className="flex items-center gap-2">
                       <span>{type.icon}</span>
@@ -178,12 +177,12 @@ export default function BlueprintVisionView() {
             </div>
 
             {/* System Focus */}
-            <div className="bg-bg-card rounded-2xl p-6 border border-gray-700">
+            <div className="bg-level-2 rounded-2xl p-6 border border-gray-700">
               <h3 className="text-lg font-semibold mb-4">System Focus</h3>
               <select
                 value={systemFocus}
                 onChange={(e) => setSystemFocus(e.target.value)}
-                className="w-full p-3 bg-bg-secondary border border-gray-700 rounded-lg text-white"
+                className="w-full p-3 bg-level-1 border border-gray-700 rounded-lg text-white"
               >
                 {systemOptions.map(opt => (
                   <option key={opt.id} value={opt.id}>{opt.name}</option>
@@ -213,7 +212,7 @@ export default function BlueprintVisionView() {
 
           {/* Right Column - Results */}
           <div className="col-span-2">
-            <div className="bg-bg-card rounded-2xl border border-gray-700 h-full flex flex-col">
+            <div className="bg-level-2 rounded-2xl border border-gray-700 h-full flex flex-col">
               <div className="flex items-center justify-between p-5 border-b border-gray-700">
                 <h3 className="text-lg font-semibold">Analysis Results</h3>
                 {analysisResult && (
