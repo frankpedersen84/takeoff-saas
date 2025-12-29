@@ -54,8 +54,8 @@ const StorageService = {
                 outputs: outputs || [],
                 // Parse JSON fields if they are stored as strings in DB, 
                 // though Supabase returns JSONB as objects automatically.
-                systems: typeof project.systems === 'string' ? JSON.parse(project.systems || '[]') : project.systems,
-                analysis: typeof project.analysis === 'string' ? JSON.parse(project.analysis || 'null') : project.analysis
+                systems: safeParse(project.systems, []),
+                analysis: safeParse(project.analysis, null)
             };
 
         } else {
@@ -63,108 +63,126 @@ const StorageService = {
         }
     },
 
-    async createProject(projectData) {
-        if (isSupabaseConfigured()) {
-            const { data, error } = await supabase
-                .from('projects')
-                .insert([{
-                    id: projectData.id,
-                    // user_id: '...', // We need to handle auth context eventually
-                    name: projectData.name,
-                    customer: projectData.customer,
-                    address: projectData.address,
-                    city: projectData.city,
-                    created_at: projectData.createdAt,
-                    updated_at: projectData.updatedAt,
-                    status: projectData.status,
-                    systems: projectData.systems // Supabase handles array->jsonb
-                }])
-                .select()
-                .single();
+    // ... (rest of file)
 
-            if (error) throw error;
-            return data;
-        } else {
-            // Clone to ensure safety
-            const safeProject = { ...projectData };
-            localProjects.set(safeProject.id, safeProject);
-            return safeProject;
-        }
+    // Helper (add this to the object or top level)
+    // Actually simpler to just inline or add helper function outside
+
+    return localProjects.get(id);
+}
     },
+
+    async createProject(projectData) {
+    if (isSupabaseConfigured()) {
+        const { data, error } = await supabase
+            .from('projects')
+            .insert([{
+                id: projectData.id,
+                // user_id: '...', // We need to handle auth context eventually
+                name: projectData.name,
+                customer: projectData.customer,
+                address: projectData.address,
+                city: projectData.city,
+                created_at: projectData.createdAt,
+                updated_at: projectData.updatedAt,
+                status: projectData.status,
+                systems: projectData.systems // Supabase handles array->jsonb
+            }])
+            .select()
+            .single();
+
+        if (error) throw error;
+        return data;
+    } else {
+        // Clone to ensure safety
+        const safeProject = { ...projectData };
+        localProjects.set(safeProject.id, safeProject);
+        return safeProject;
+    }
+},
 
     async updateProject(id, updates) {
-        if (isSupabaseConfigured()) {
-            // Separate top-level fields from relations
-            const { documents, outputs, estimates, ...fields } = updates;
+    if (isSupabaseConfigured()) {
+        // Separate top-level fields from relations
+        const { documents, outputs, estimates, ...fields } = updates;
 
-            const { data, error } = await supabase
-                .from('projects')
-                .update({
-                    ...fields,
-                    updated_at: new Date().toISOString()
-                })
-                .eq('id', id)
-                .select()
-                .single();
+        const { data, error } = await supabase
+            .from('projects')
+            .update({
+                ...fields,
+                updated_at: new Date().toISOString()
+            })
+            .eq('id', id)
+            .select()
+            .single();
 
-            if (error) throw error;
-            return data;
-        } else {
-            const existing = localProjects.get(id);
-            if (!existing) return null;
+        if (error) throw error;
+        return data;
+    } else {
+        const existing = localProjects.get(id);
+        if (!existing) return null;
 
-            const updated = { ...existing, ...updates, updatedAt: new Date().toISOString() };
-            localProjects.set(id, updated);
-            return updated;
-        }
-    },
+        const updated = { ...existing, ...updates, updatedAt: new Date().toISOString() };
+        localProjects.set(id, updated);
+        return updated;
+    }
+},
 
     async deleteProject(id) {
-        if (isSupabaseConfigured()) {
-            const { error } = await supabase
-                .from('projects')
-                .delete()
-                .eq('id', id);
+    if (isSupabaseConfigured()) {
+        const { error } = await supabase
+            .from('projects')
+            .delete()
+            .eq('id', id);
 
-            if (error) throw error;
-            return true;
-        } else {
-            return localProjects.delete(id);
-        }
-    },
+        if (error) throw error;
+        return true;
+    } else {
+        return localProjects.delete(id);
+    }
+},
 
     // ==========================================================================
     // DOCUMENTS
     // ==========================================================================
 
     async addDocuments(projectId, newDocs) {
-        if (isSupabaseConfigured()) {
-            const dbDocs = newDocs.map(doc => ({
-                project_id: projectId,
-                filename: doc.filename,
-                storage_path: doc.path, // Assuming we saved to R2/Storage earlier
-                file_type: doc.mimetype,
-                size_bytes: doc.size,
-                vision_data: doc.visionData
-            }));
+    if (isSupabaseConfigured()) {
+        const dbDocs = newDocs.map(doc => ({
+            project_id: projectId,
+            filename: doc.filename,
+            storage_path: doc.path, // Assuming we saved to R2/Storage earlier
+            file_type: doc.mimetype,
+            size_bytes: doc.size,
+            vision_data: doc.visionData
+        }));
 
-            const { data, error } = await supabase
-                .from('documents')
-                .insert(dbDocs)
-                .select();
+        const { data, error } = await supabase
+            .from('documents')
+            .insert(dbDocs)
+            .select();
 
-            if (error) throw error;
-            return data;
-        } else {
-            const project = localProjects.get(projectId);
-            if (!project) throw new Error('Project not found');
+        if (error) throw error;
+        return data;
+    } else {
+        const project = localProjects.get(projectId);
+        if (!project) throw new Error('Project not found');
 
-            project.documents = [...(project.documents || []), ...newDocs];
-            project.updatedAt = new Date().toISOString();
-            localProjects.set(projectId, project);
-            return project;
-        }
+        project.documents = [...(project.documents || []), ...newDocs];
+        project.updatedAt = new Date().toISOString();
+        localProjects.set(projectId, project);
+        return project;
     }
+}
 };
 
 module.exports = StorageService;
+
+function safeParse(val, fallback) {
+    if (typeof val !== 'string') return val;
+    try {
+        return JSON.parse(val || String(fallback));
+    } catch (e) {
+        return val; // Return original string if parse fails (e.g. Markdown)
+    }
+}
