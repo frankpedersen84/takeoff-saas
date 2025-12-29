@@ -1,4 +1,6 @@
-const API_BASE = '/api';
+// In production (Cloudflare), this will be the Render backend URL.
+// In development, it falls back to the Vite proxy ('/api').
+const API_BASE = import.meta.env.VITE_API_URL || '/api';
 
 class ApiError extends Error {
   constructor(message, status, data) {
