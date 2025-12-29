@@ -61,6 +61,7 @@ app.use(express.urlencoded({ extended: true, limit: '100mb' }));
 app.use((req, res, next) => {
   const requestId = uuidv4();
   req.requestId = requestId;
+  console.log(`[REQUEST] ${req.method} ${req.path}`); // Added debug log
   logger.info(`${req.method} ${req.path}`, {
     requestId,
     ip: req.ip,

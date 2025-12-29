@@ -1,12 +1,34 @@
-# Use Node 18 (LTS) on Debian Slim for smaller image size
-FROM node:18-bullseye-slim
+# Build Stage
+FROM node:18-bullseye-slim AS builder
 
-# Install system dependencies required for canvas, sharp, and pdf tools
+# Install build tools
 RUN apt-get update && apt-get install -y \
     python3 \
     make \
     g++ \
     build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+COPY server/package*.json ./server/
+
+# Install dependencies
+RUN npm install
+
+# Copy source code
+COPY . .
+
+# Build the frontend
+RUN npm run build
+
+# Production Stage
+FROM node:18-bullseye-slim
+
+# Install runtime dependencies for canvas/sharp
+RUN apt-get update && apt-get install -y \
     libcairo2-dev \
     libpango1.0-dev \
     libjpeg-dev \
@@ -14,25 +36,20 @@ RUN apt-get update && apt-get install -y \
     librsvg2-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Set working directory
 WORKDIR /app
 
-# Copy root package files first (since we have a monorepo-like structure)
-COPY package*.json ./
-COPY server/package*.json ./server/
+# Copy built artifacts and server dependencies
+COPY --from=builder /app/package*.json ./
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/server ./server
+COPY --from=builder /app/dist ./dist
 
-# Install dependencies (from root to ensure everything is linked)
-RUN npm install
-
-# Copy application source
-COPY . .
-
-# Set environment variables
+# Set environment
 ENV NODE_ENV=production
 ENV PORT=3000
 
-# Expose the port
+# Expose port
 EXPOSE 3000
 
-# Start the server
+# Start server
 CMD ["node", "server/index.js"]
