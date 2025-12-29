@@ -785,7 +785,11 @@ export default function ProjectView({ projectId, companyProfile, onNavigate, onT
             Object.entries(kb.specifications.systems).forEach(([sys, info]) => {
               if (info.required) {
                 smartContext += `\n**${sys.toUpperCase()}**:\n${info.description || ''}\n`;
-                if (info.deviceTypes) smartContext += `Required Devices: ${info.deviceTypes.join(', ')}\n`;
+                if (info.deviceTypes && Array.isArray(info.deviceTypes)) {
+                  smartContext += `Required Devices: ${info.deviceTypes.join(', ')}\n`;
+                } else if (info.deviceTypes) {
+                  smartContext += `Required Devices: ${info.deviceTypes}\n`;
+                }
               }
             });
           }
