@@ -15,6 +15,7 @@ const profileRoutes = require('./routes/profile');
 const conciergeRoutes = require('./routes/concierge');
 
 const app = express();
+app.set('trust proxy', 1); // Trust first, necessary for Render/Heroku
 const PORT = process.env.PORT || 3001;
 
 // Security middleware
