@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: takeoff-api
+    env: docker
+    plan: free
+    region: oregon
+    buildCommand: docker build -t takeoff-api .
+    startCommand: node server/index.js
+    headers:
+      - path: /*
+        name: Access-Control-Allow-Origin
+        value: "*"
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: NODE_ENV
+        value: production
+      - key: FRONTEND_URL
+        value: https://takeoff-saas.pages.dev
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: GOOGLE_API_KEY
+        sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_KEY
+        sync: false
+      - key: SESSION_SECRET
+        generate: true
