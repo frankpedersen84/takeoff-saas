@@ -12,17 +12,36 @@ class ApiError extends Error {
 }
 
 async function handleResponse(response) {
-  const data = await response.json().catch(() => ({}));
-
+  // If response is not OK, try to extract error details
   if (!response.ok) {
-    throw new ApiError(
-      data.error || `Request failed with status ${response.status}`,
-      response.status,
-      data
-    );
+    let errorMessage = `Request failed with status ${response.status}`;
+    let errorData = null;
+
+    try {
+      const text = await response.text();
+      try {
+        errorData = JSON.parse(text);
+        errorMessage = errorData.error || errorMessage;
+      } catch (e) {
+        // Not JSON, probably HTML (404/500 page)
+        console.error('API Error Response (Non-JSON):', text.substring(0, 500));
+        errorMessage += ` (${response.statusText})`;
+      }
+    } catch (e) {
+      // Failed to read text
+    }
+
+    throw new ApiError(errorMessage, response.status, errorData);
   }
 
-  return data;
+  // Response is OK, parse JSON
+  try {
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Failed to parse API response:', error);
+    return {}; // Return empty object if JSON parsing fails but status was OK
+  }
 }
 
 export const api = {

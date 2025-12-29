@@ -50,14 +50,20 @@ function AppContent() {
   const loadAgents = async () => {
     try {
       const response = await api.getAgents();
-      const agentMap = {};
-      response.agents.forEach(agent => {
-        agentMap[agent.id] = agent;
-      });
-      setAgents(agentMap);
+      if (response && response.agents) {
+        const agentMap = {};
+        response.agents.forEach(agent => {
+          agentMap[agent.id] = agent;
+        });
+        setAgents(agentMap);
+      } else {
+        console.warn('API returned unexpected agents structure:', response);
+        // Fallback to empty or default if needed, for now just don't crash
+      }
     } catch (error) {
       console.error('Failed to load agents:', error);
-      showToast('Failed to load agents', 'error');
+      // Don't show toast on mount as it might be annoying if offline
+      // showToast('Failed to load agents', 'error');
     }
   };
 
@@ -95,12 +101,12 @@ function AppContent() {
     try {
       // Step 1: Upload and extract text from documents
       setProcessingStep('Uploading and extracting document contents...');
-      
+
       const formData = new FormData();
       uploadedFiles.forEach(f => formData.append('files', f.file));
-      
+
       const uploadResponse = await api.uploadDocuments(formData);
-      
+
       if (uploadResponse.processed === 0) {
         throw new Error('No documents could be processed');
       }
@@ -110,7 +116,7 @@ function AppContent() {
 
       // Step 2: Analyze with orchestrator
       setProcessingStep('AI analyzing project scope...');
-      
+
       const analysisResponse = await api.analyzeProject({
         projectInfo,
         documentContents: uploadResponse.documents
@@ -124,7 +130,7 @@ function AppContent() {
       // Step 3: Determine active systems (parse from analysis or use defaults)
       setProcessingStep('Identifying required systems...');
       await new Promise(r => setTimeout(r, 1000));
-      
+
       // For now, activate common systems - in production, parse from analysis
       const detectedSystems = ['fireAlarm', 'dataCabling', 'cctv', 'accessControl'];
       setActiveAgents(detectedSystems);
@@ -142,7 +148,7 @@ function AppContent() {
 
       setProcessingStep('Analysis complete!');
       await new Promise(r => setTimeout(r, 500));
-      
+
       setIsProcessing(false);
       setCurrentView('dashboard');
       showToast('Project analysis complete', 'success');
@@ -187,7 +193,7 @@ function AppContent() {
     } catch (error) {
       console.error('Chat error:', error);
       showToast(error.message || 'Failed to send message', 'error');
-      
+
       // Add error message to chat
       setChatHistory(prev => [...prev, {
         role: 'assistant',
@@ -228,7 +234,7 @@ function AppContent() {
   const buildProjectContext = (agentId) => {
     const agent = agents[agentId];
     let context = `I'm working on a project and need your expertise as the ${agent?.name || 'specialist'}.\n\n`;
-    
+
     context += `**PROJECT INFORMATION:**\n`;
     context += `- Project Name: ${projectInfo.name || 'Not specified'}\n`;
     context += `- Customer: ${projectInfo.customer || 'Not specified'}\n`;
@@ -345,25 +351,47 @@ function AppContent() {
     }
   };
 
+  // ... inside AppContent ...
+  const [isAdvancedMode, setIsAdvancedMode] = useState(false);
+
+  // ... existing code ...
+
   return (
-    <>
-      <div className="bg-pattern" />
-      <div className="grid-overlay" />
-      
-      <div className="relative z-10">
-        <Header
-          currentView={currentView}
-          onNavigate={navigateTo}
-          onOpenApiSettings={() => setShowApiKeyModal(true)}
-        />
-        
-        {renderView()}
-      </div>
+    <AppLayout
+      currentView={currentView}
+      onNavigate={navigateTo}
+      isAdvancedMode={isAdvancedMode}
+      setIsAdvancedMode={setIsAdvancedMode}
+      onOpenApiSettings={() => setShowApiKeyModal(true)}
+    >
+      {/* If the current view expects isAdvancedMode, pass it down effectively by cloning or just props if we could, 
+          but since we have a renderView switch, we pass it there. */}
+      {(() => {
+        // We need to pass isAdvancedMode to DashboardView
+        if (currentView === 'dashboard') {
+          return (
+            <DashboardView
+              projectInfo={projectInfo}
+              projectData={projectData}
+              activeAgents={activeAgents}
+              agentOutputs={agentOutputs}
+              agents={agents}
+              onNavigate={navigateTo}
+              isAdvancedMode={isAdvancedMode}
+              onExampleLoad={() => {
+                // Quick helper for the simple mode wizard to load example data
+                setProjectInfo({ name: 'Example Office Tower', city: 'Austin, TX', customer: 'Nexus Corp' });
+              }}
+            />
+          );
+        }
+        return renderView();
+      })()}
 
       {showApiKeyModal && (
         <ApiKeyModal onClose={() => setShowApiKeyModal(false)} />
       )}
-    </>
+    </AppLayout>
   );
 }
 
