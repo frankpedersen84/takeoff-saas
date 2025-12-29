@@ -7,7 +7,7 @@ const navItems = [
   { id: 'profile', label: 'Profile', icon: '🏢' }
 ];
 
-import React from 'react';
+
 
 export default function Header({
   currentView,
